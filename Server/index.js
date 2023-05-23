@@ -5,11 +5,16 @@ dotenv.config();
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import connectDB from './config/db.js';
 // Set the port for the server
 const port = process.env.PORT || 8000;
 
+connectDB();
+
 // Create an instance of Express application
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
