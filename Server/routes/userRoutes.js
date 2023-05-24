@@ -4,10 +4,11 @@ import {
   getUser,
   updateUser,
 } from '../controllers/userController.js';
+import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
-router.get('/user', getUser);
-router.put('/user', updateUser);
-router.delete('/user', deleteUser);
+router.get('/user', protect, getUser);
+router.put('/user', protect, updateUser);
+router.delete('/user', protect, deleteUser);
 
 export default router;
