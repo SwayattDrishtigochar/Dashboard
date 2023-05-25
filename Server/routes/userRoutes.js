@@ -4,7 +4,7 @@ import {
   getUser,
   updateUser,
 } from '../controllers/userController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, isAdmin } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.get('/user', protect, getUser);
