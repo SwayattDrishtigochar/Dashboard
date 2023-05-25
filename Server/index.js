@@ -6,6 +6,7 @@ dotenv.config();
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import companyRoutes from './routes/companyRoutes.js';
 import connectDB from './config/db.js';
 // Set the port for the server
 const port = process.env.PORT || 8000;
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api', companyRoutes);
 
 // Route: GET /
 // Description: Home route to check if the server is ready

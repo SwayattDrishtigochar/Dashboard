@@ -6,6 +6,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
+    },
     email: {
       type: String,
       required: true,
