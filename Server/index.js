@@ -19,21 +19,69 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+/**
+ * Middleware for handling authentication routes.
+ * @name authRoutes
+ * @type {import('express').Router}
+ */
 app.use('/api', authRoutes);
+
+/**
+ * Middleware for handling user routes.
+ * @name userRoutes
+ * @type {import('express').Router}
+ */
 app.use('/api', userRoutes);
+
+/**
+ * Middleware for handling company routes.
+ * @name companyRoutes
+ * @type {import('express').Router}
+ */
 app.use('/api', companyRoutes);
 
-// Route: GET /
-// Description: Home route to check if the server is ready
+/**
+ * Route for the home page.
+ * @name GET /
+ * @function
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 app.get('/', (req, res) => {
   // Send a response with the message "Server is ready"
   res.send('Server is ready');
 });
 
+/**
+ * Middleware for handling 404 errors (route not found).
+ * @name notFound
+ * @function
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {function} next - The next middleware function.
+ */
 app.use(notFound);
+
+/**
+ * Middleware for handling errors.
+ * @name errorHandler
+ * @function
+ * @memberof module:index
+ * @param {Error} err - The error object.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {function} next - The next middleware function.
+ */
 app.use(errorHandler);
 
-// Start the server
+/**
+ * Start the server.
+ * @name listen
+ * @function
+ * @memberof module:index
+ * @param {number} port - The port number to listen on.
+ * @param {function} callback - The callback function to execute when the server starts listening.
+ */
 app.listen(port, () => {
   // Log a message indicating that the server has started
   console.log(`Server is started on port ${port}`);

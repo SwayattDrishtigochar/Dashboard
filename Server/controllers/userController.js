@@ -1,21 +1,31 @@
+/**
+ * @module Controller/User
+ * @author Sunny Vedwal
+ */
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 
-/*
- *@desc Get profile info
- *@access Private
- *route POST /api/user
+/**
+ * @description Retrieves the profile information of the authenticated user.
+ * @function getUser
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @returns {Object} - User profile information
+ * @throws {Error} - If user is not found or server error occurs
  */
 
 const getUser = asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate('company');
+    console.log(user);
     if (user) {
       const populatedUser = {
         _id: user._id,
-        name: user.name,
+        fname: user.fname,
+        lname: user.lname,
         email: user.email,
-        company: user.company.name, // Assuming `name` is a property of the `Company` model
+        company: user.company.name ? user.company.name : 'NA', // Assuming `name` is a property of the `Company` model
       };
       res.status(200).json(populatedUser);
     } else {
@@ -23,19 +33,23 @@ const getUser = asyncHandler(async (req, res) => {
       throw new Error('User not found');
     }
   } catch (error) {
-    res.status(500);
-    throw new Error('Server Error');
+    console.log(error);
   }
 });
-/*
- *@desc Update profile info
- *@access Private
- *route POST /api/user
+/**
+ * @description Updates the profile information of the authenticated user.
+ * @function updateUser
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @returns {Object} - Updated user profile information
+ * @throws {Error} - If user is not found
  */
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    user.name = req.body.name || user.name;
+    user.fname = req.body.fname || user.fname;
+    user.lname = req.body.lname || user.lname;
     user.email = req.body.email || user.email;
     if (req.body.password) {
       user.password = req.body.password;
@@ -43,7 +57,8 @@ const updateUser = asyncHandler(async (req, res) => {
     const updatedUSer = await user.save();
     res.status(200).json({
       _id: updatedUSer._id,
-      name: updatedUSer.name,
+      fname: updatedUSer.fname,
+      lname: updatedUSer.lname,
       email: updatedUSer.email,
     });
   } else {
@@ -52,10 +67,13 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-/*
- !@desc Delete a user
- *@access Private
- *route POST /api/user
+/**
+ * @description Deletes the profile of the authenticated user.
+ * @function deleteUser
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @throws {Error} - If user is not found or password does not match
  */
 const deleteUser = asyncHandler(async (req, res) => {
   const { password } = req.body;

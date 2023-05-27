@@ -2,7 +2,7 @@
 
 Stack Used:
 
-- Backend API with Node and Express
+- Backend with Node and Express
 - React frontend
 - MongoDB for database
 
@@ -29,9 +29,10 @@ JWT_SECRET = 'abc123'
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.0"
-  }
+  },
 ```
 
 ### Install Dependencies (frontend & backend)

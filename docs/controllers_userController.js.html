@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>controllers/userController.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/SwayattDrishtigochar/Dashboard/" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h3>Modules</h3><ul><li><a href="module-AuthController.html">AuthController</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-AuthController.html#~SigninUser">SigninUser</a></li><li data-type='method' style='display: none;'><a href="module-AuthController.html#~SignoutUser">SignoutUser</a></li><li data-type='method' style='display: none;'><a href="module-AuthController.html#~SignupUser">SignupUser</a></li></ul></li><li><a href="module-Controller_Company.html">Controller/Company</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Controller_Company.html#~RegisterCompany">RegisterCompany</a></li></ul></li><li><a href="module-Controller_User.html">Controller/User</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Controller_User.html#~deleteUser">deleteUser</a></li><li data-type='method' style='display: none;'><a href="module-Controller_User.html#~getUser">getUser</a></li><li data-type='method' style='display: none;'><a href="module-Controller_User.html#~updateUser">updateUser</a></li></ul></li><li><a href="module-Middleware_Auth.html">Middleware/Auth</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Middleware_Auth.html#~isAdmin">isAdmin</a></li><li data-type='method' style='display: none;'><a href="module-Middleware_Auth.html#~protect">protect</a></li></ul></li><li><a href="module-Model_Company.html">Model/Company</a></li><li><a href="module-Model_User.html">Model/User</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Model_User.html#~matchPassword">matchPassword</a></li><li data-type='method' style='display: none;'><a href="module-Model_User.html#~preSave">preSave</a></li></ul></li><li><a href="module-routes_authRoutes.html">routes/authRoutes</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-routes_authRoutes.html#.POST/signin">POST /signin</a></li><li data-type='method' style='display: none;'><a href="module-routes_authRoutes.html#.POST/signout">POST /signout</a></li><li data-type='method' style='display: none;'><a href="module-routes_authRoutes.html#.POST/signup">POST /signup</a></li></ul></li><li><a href="module-routes_userRoutes.html">routes/userRoutes</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">controllers/userController.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module Controller/User
+ * @author Sunny Vedwal
+ */
+import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
+
+/**
+ * @description Retrieves the profile information of the authenticated user.
+ * @function getUser
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @returns {Object} - User profile information
+ * @throws {Error} - If user is not found or server error occurs
+ */
+
+const getUser = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate('company');
+    if (user) {
+      const populatedUser = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        company: user.company.name, // Assuming `name` is a property of the `Company` model
+      };
+      res.status(200).json(populatedUser);
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error('Server Error');
+  }
+});
+/**
+ * @description Updates the profile information of the authenticated user.
+ * @function updateUser
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @returns {Object} - Updated user profile information
+ * @throws {Error} - If user is not found
+ */
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    const updatedUSer = await user.save();
+    res.status(200).json({
+      _id: updatedUSer._id,
+      name: updatedUSer.name,
+      email: updatedUSer.email,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User Not Found');
+  }
+});
+
+/**
+ * @description Deletes the profile of the authenticated user.
+ * @function deleteUser
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @throws {Error} - If user is not found or password does not match
+ */
+const deleteUser = asyncHandler(async (req, res) => {
+  const { password } = req.body;
+  const user = await User.findById(req.user._id);
+  let confirmedDelete = await user.matchPassword(password);
+  if (user &amp;&amp; confirmedDelete) {
+    await User.deleteOne({ _id: user._id });
+    res.cookie('jwt', '', {
+      expires: new Date(0),
+      httpOnly: true,
+    });
+    res.status(200).json({ message: 'User deleted successfully' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+export { getUser, updateUser, deleteUser };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Sat May 27 2023 10:28:46 GMT+0530 (India Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+    "source": {
+        "include": ["Server", "Readme.md"],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "plugins": {
+        "plugins": ["plugins/markdown"]
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true,
+        "default": {
+            "outputSourceFiles": true,
+            "useLongnameInNav": true
+
+        }
+    },
+    "recurseDepth": 10,
+    "opts": {
+        "template": "node_modules/docdash",
+        "destination": "./docs/",
+        "recurse": true
+    },
+    "docdash": {
+        "static": true,
+        "search": true,
+        "sort": true,
+        "collapse": true,
+        "typedefs": true,
+        "removeQuotes": "none",
+        "scripts": [],
+        "menu": {
+            "Github repo": {
+                "href": "https://github.com/SwayattDrishtigochar/Dashboard/",
+                "target": "_blank",
+                "class": "menu-item",
+                "id": "repository"
+            }
+        }
+    }
+}

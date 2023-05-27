@@ -1,7 +1,22 @@
+/**
+ * @module Middleware/Auth
+ * @author Sunny Vedwal
+ */
+
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 
+/**
+ *@description Protects routes by verifying the JWT token.
+ *
+ * @function protect
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Next function to continue to the next middleware/route handler
+ * @throws {Error} - If the user is not authorized (no token or invalid token)
+ */
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
@@ -22,6 +37,16 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
+/**
+ * @description Checks if the user is an admin.
+ *
+ * @function isAdmin
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Next function to continue to the next middleware/route handler
+ * @throws {Error} - If no user is found or if the user is not authorized
+ */
 const isAdmin = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user._id);
   if (!user) {
@@ -37,5 +62,3 @@ const isAdmin = asyncHandler(async (req, res, next) => {
 });
 
 export { protect, isAdmin };
-
-//TODO: add admin protect functionality

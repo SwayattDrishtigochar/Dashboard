@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/SwayattDrishtigochar/Dashboard/" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h3>Modules</h3><ul><li><a href="module-AuthController.html">AuthController</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-AuthController.html#~SigninUser">SigninUser</a></li><li data-type='method' style='display: none;'><a href="module-AuthController.html#~SignoutUser">SignoutUser</a></li><li data-type='method' style='display: none;'><a href="module-AuthController.html#~SignupUser">SignupUser</a></li></ul></li><li><a href="module-Controller_Company.html">Controller/Company</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Controller_Company.html#~RegisterCompany">RegisterCompany</a></li></ul></li><li><a href="module-Controller_User.html">Controller/User</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Controller_User.html#~deleteUser">deleteUser</a></li><li data-type='method' style='display: none;'><a href="module-Controller_User.html#~getUser">getUser</a></li><li data-type='method' style='display: none;'><a href="module-Controller_User.html#~updateUser">updateUser</a></li></ul></li><li><a href="module-Middleware_Auth.html">Middleware/Auth</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Middleware_Auth.html#~isAdmin">isAdmin</a></li><li data-type='method' style='display: none;'><a href="module-Middleware_Auth.html#~protect">protect</a></li></ul></li><li><a href="module-Model_Company.html">Model/Company</a></li><li><a href="module-Model_User.html">Model/User</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-Model_User.html#~matchPassword">matchPassword</a></li><li data-type='method' style='display: none;'><a href="module-Model_User.html#~preSave">preSave</a></li></ul></li><li><a href="module-routes_authRoutes.html">routes/authRoutes</a><ul class='methods'><li data-type='method' style='display: none;'><a href="module-routes_authRoutes.html#.POST/signin">POST /signin</a></li><li data-type='method' style='display: none;'><a href="module-routes_authRoutes.html#.POST/signout">POST /signout</a></li><li data-type='method' style='display: none;'><a href="module-routes_authRoutes.html#.POST/signup">POST /signup</a></li></ul></li><li><a href="module-routes_userRoutes.html">routes/userRoutes</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+    <section class="package">
+        <h3> </h3>		
+    </section>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    <section class="readme usertext">
+        <article><h1>MERN DASHBOARD</h1>
+<p>Stack Used:</p>
+<ul>
+<li>Backend with Node and Express</li>
+<li>React frontend</li>
+<li>MongoDB for database</li>
+</ul>
+<h2>Usage</h2>
+<ul>
+<li>Create a MongoDB database and obtain your <code>MongoDB URI</code> - <a href="https://www.mongodb.com/cloud/atlas/register">MongoDB Atlas</a></li>
+</ul>
+<h3>Env Variables</h3>
+<p>Rename the <code>.env.example</code> file to <code>.env</code> and add the following</p>
+<pre class="prettyprint source"><code>NODE_ENV = development
+PORT = 5000
+MONGO_URI = your mongodb uri
+JWT_SECRET = 'abc123'
+</code></pre>
+<h3>Dependencies for backend</h3>
+<pre class="prettyprint source"><code>&quot;dependencies&quot;: {
+    &quot;bcryptjs&quot;: &quot;^2.4.3&quot;,
+    &quot;cookie-parser&quot;: &quot;^1.4.6&quot;,
+    &quot;dotenv&quot;: &quot;^16.0.3&quot;,
+    &quot;express&quot;: &quot;^4.18.2&quot;,
+    &quot;express-async-handler&quot;: &quot;^1.2.0&quot;,
+    &quot;jsonwebtoken&quot;: &quot;^9.0.0&quot;,
+    &quot;mongoose&quot;: &quot;^7.2.0&quot;
+  },
+</code></pre>
+<h3>Install Dependencies (frontend &amp; backend)</h3>
+<pre class="prettyprint source"><code>npm install
+cd frontend
+npm install
+</code></pre>
+<h3>Run</h3>
+<pre class="prettyprint source"><code>
+# Run frontend (:3000) & backend (:5000)
+npm run dev
+
+# Run backend only
+npm run server
+</code></pre>
+<h2>Build &amp; Deploy</h2>
+<pre class="prettyprint source"><code># Create frontend prod build
+cd frontend
+npm run build
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Sat May 27 2023 10:28:46 GMT+0530 (India Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
