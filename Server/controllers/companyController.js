@@ -39,4 +39,20 @@ const RegisterCompany = asyncHandler(async (req, res) => {
   }
 });
 
-export { RegisterCompany };
+const getCompany = asyncHandler(async (req, res) => {
+  const { companyId } = req.params;
+
+  // Find the company by ID and populate the users and admins fields
+  const company = await Company.findById(companyId)
+    .populate('users')
+    .populate('admins');
+
+  if (company) {
+    res.status(200).json(company);
+  } else {
+    res.status(404);
+    throw new Error('Company not found');
+  }
+});
+
+export { RegisterCompany, getCompany };

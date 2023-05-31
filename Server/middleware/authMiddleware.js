@@ -24,12 +24,17 @@ const protect = asyncHandler(async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.userId).select('-password');
-
-      next();
+      const user = await User.findById(decoded.userId).select('-password');
+      if (user.verified !== true) {
+        res.status(401);
+        throw new Error('User not verified');
+      } else {
+        req.user = user;
+        next();
+      }
     } catch (error) {
       res.status(401);
-      throw new Error('Not authorized');
+      throw new Error(error);
     }
   } else {
     res.status(401);

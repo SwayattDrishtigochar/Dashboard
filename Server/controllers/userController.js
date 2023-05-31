@@ -18,12 +18,12 @@ import User from '../models/userModel.js';
 const getUser = asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate('company');
-    console.log(user);
     if (user) {
       const populatedUser = {
         _id: user._id,
         fname: user.fname,
         lname: user.lname,
+        phone: user.phone,
         email: user.email,
         company: user.company.name ? user.company.name : 'NA', // Assuming `name` is a property of the `Company` model
       };
