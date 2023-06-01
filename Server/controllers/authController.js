@@ -33,10 +33,8 @@ const SigninUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
     res.status(201).json({
-      _id: user._id,
       fname: user.fname,
       lname: user.lname,
-      phone: user.phone,
       email: user.email,
     });
   } else {
