@@ -9,6 +9,8 @@ import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 import Company from '../models/companyModel.js';
 import Otp from '../models/OtpModel.js';
+
+import { sendOtp } from './otpController.js';
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -55,6 +57,7 @@ const SigninUser = asyncHandler(async (req, res) => {
  */
 const SignupUSer = asyncHandler(async (req, res) => {
   const { fname, lname, phone, company, email, password } = req.body;
+
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
@@ -69,7 +72,8 @@ const SignupUSer = asyncHandler(async (req, res) => {
     password,
   });
   if (user) {
-    sendOtpVerificationEmail(res, user);
+    // generateToken(res, user._id);
+    sendOtp(user.email);
     const company = await Company.findById(user.company);
     if (company) {
       company.users.push(user._id);
@@ -83,6 +87,7 @@ const SignupUSer = asyncHandler(async (req, res) => {
       fname: user.fname,
       lname: user.lname,
       email: user.email,
+      verified: user.verified,
     });
   } else {
     res.status(400);
@@ -107,53 +112,4 @@ const SignoutUSer = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'User logged out' });
 });
 
-const sendOtpVerificationEmail = asyncHandler(async (res, user) => {
-  const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-  const mailOptions = {
-    from: 'sunnyvedwal@gmail.com',
-    to: user.email,
-    subject: 'OTP Verification',
-    text: `Your OTP is ${otp}`,
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error sending OTP:', error);
-      return res.status(500).json({ error: 'Failed to send OTP' });
-    }
-    console.log('OTP sent:', info.response);
-    res.status(201).json({ message: 'User registered successfully' });
-  });
-
-  const otpSave = new Otp({
-    otp: otp,
-    email: user.email,
-  });
-  await otpSave.save();
-});
-
-const verifyOtp = asyncHandler(async (req, res) => {
-  const { email, otp } = req.body;
-
-  const otpData = await Otp.findOne({ email });
-  if (otpData && otpData.matchOtp(otp)) {
-    const user = await User.findOne({ email });
-
-    if (user) {
-      //update the verified property to true
-      user.verified = true;
-      await user.save();
-
-      generateToken(res, user._id);
-      res.status(200).json({ message: 'User logged in successfully' });
-    } else {
-      res.status(404).json({ error: 'User not found' });
-    }
-  } else {
-    res.status(401);
-
-    throw new Error('Invalid OTP');
-  }
-});
-
-export { SigninUser, SignupUSer, SignoutUSer, verifyOtp };
+export { SigninUser, SignupUSer, SignoutUSer };

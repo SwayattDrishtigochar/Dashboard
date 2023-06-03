@@ -19,7 +19,6 @@ import {
   SigninUser,
   SignoutUSer,
   SignupUSer,
-  verifyOtp,
 } from '../controllers/authController.js';
 
 /**
@@ -51,7 +50,5 @@ router.post('/signup', SignupUSer);
  * @param {function} SignoutUSer - Controller function for handling user sign-out
  */
 router.post('/signout', SignoutUSer);
-
-router.post('/verify', verifyOtp);
 
 export default router;

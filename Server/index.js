@@ -6,6 +6,7 @@ dotenv.config();
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import otpRoutes from './routes/otpRoutes.js';
 import companyRoutes from './routes/companyRoutes.js';
 import connectDB from './config/db.js';
 // Set the port for the server
@@ -25,6 +26,7 @@ app.use(cookieParser());
  * @type {import('express').Router}
  */
 app.use('/api', authRoutes);
+app.use('/api', otpRoutes);
 
 /**
  * Middleware for handling user routes.

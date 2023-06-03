@@ -5,17 +5,24 @@ const OtpSchema = mongoose.Schema(
   {
     email: {
       type: String,
-      ref: 'User',
+      required: true,
+      trim: true,
     },
     otp: {
       type: String,
+      required: true,
+      trim: true,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      index: {
-        expires: '1m',
-      },
+    expireIn: {
+      type: String,
+      trim: true,
+    },
+
+    status: {
+      type: String,
+      trim: true,
+      enum: ['pending', 'confirmed', 'rejected'], // Accepts only "pending" or "confirmed" as values
+      default: 'pending', // Set the default value as "pending"
     },
   },
   {

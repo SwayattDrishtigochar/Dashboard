@@ -16,6 +16,13 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    verifyOtp: builder.mutation({
+      query: (data) => ({
+        url: '/api/verify',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: '/api/signout',
@@ -25,5 +32,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
-  authApiSlice;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  useVerifyOtpMutation,
+} = authApiSlice;
