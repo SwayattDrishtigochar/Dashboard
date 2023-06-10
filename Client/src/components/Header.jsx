@@ -1,14 +1,14 @@
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaSignInAlt, FaSignOutAlt, FaRegUserCircle } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../slices/authApiSlice';
 import { logout } from '../slices/authSlice';
+import Logo from '../assets/logo.png';
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,10 +27,26 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
+      <Navbar
+        variant='light'
+        expand='md'
+        collapseOnSelect
+        className='p-0 m-0'
+        style={{
+          boxShadow: 'rgba(0, 0, 0, 0.15) 0px 0px 0px 2px',
+        }}
+      >
         <Container>
           <LinkContainer to='/'>
-            <Navbar.Brand>MERN Auth</Navbar.Brand>
+            <Navbar.Brand>
+              <img
+                src={Logo}
+                width='28'
+                height='40'
+                className='d-inline-block align-top'
+                alt='React Bootstrap logo'
+              />
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
@@ -38,7 +54,10 @@ const Header = () => {
               {userInfo ? (
                 <>
                   <NavDropdown
-                    title={`${userInfo.fname}   ${userInfo.lname}`}
+                    style={{
+                      fontSize: '25px',
+                    }}
+                    title={<FaRegUserCircle />}
                     id='username'
                   >
                     <LinkContainer to='/profile'>

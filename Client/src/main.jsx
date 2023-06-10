@@ -15,14 +15,31 @@ import HomeScreen from './screens/HomeScreen.jsx';
 import LoginScreen from './screens/LoginScreen.jsx';
 import RegisterScreen from './screens/RegisterScreen.jsx';
 import OtpScreen from './screens/OtpScreen.jsx';
+import ProfileScreen from './screens/ProfileScreen.jsx';
+import PrivateRoute from './auth/PrivateRoute.jsx';
+import AdminRoute from './auth/AdminRoute.jsx';
+import DashboardScreen from './screens/DashboardScreen.jsx';
+import DashboardRoute from './auth/DashboardRoute.jsx';
+import PendingScreen from './screens/PendingScreen.jsx';
+import AdminControlScreen from './screens/AdminControlScreen.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
+
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
       <Route path='/otp' element={<OtpScreen />} />
+      <Route path='/company' element={<AdminControlScreen />} />
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/pending' element={<PendingScreen />} />
+        <Route path='' element={<DashboardRoute />}>
+          <Route path='/dash' element={<DashboardScreen />} />
+        </Route>
+        <Route path='/profile' element={<ProfileScreen />} />
+      </Route>
+      <Route path='' element={<AdminRoute />}></Route>
     </Route>
   )
 );

@@ -1,10 +1,10 @@
 .inputStyle {
-  width: 3rem !important;
-  height: 3rem;
+  width: 32px !important;
+  height: 32px;
   margin: 0 1rem;
-  font-size: 2rem;
+  font-size: 12px;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid black;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -17,4 +17,15 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.dropdown-menu[data-bs-popper] {
+  top: 100%;
+  left: auto !important;
+  right: 0;
+  margin-top: var(--bs-dropdown-spacer);
 }

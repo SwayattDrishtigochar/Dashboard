@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col, Spinner } from 'react-bootstrap';
+import { Form, Button, Row, Col, FloatingLabel } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
+import Loader from '../components/Loader';
 import { useLoginMutation } from '../slices/authApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const emailRef = useRef('');
+  const passwordRef = useRef('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,71 +20,104 @@ const LoginScreen = () => {
   const [login, { isLoading, error }] = useLoginMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
+  console.log(userInfo);
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate('/dash');
     }
   }, [navigate, userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
     try {
       const res = await login({
         email,
         password,
       }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate('/');
+      navigate('/dash');
+      toast.success('Login Successful');
     } catch (err) {
       toast.error(err?.data?.message || err?.error);
     }
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
   return (
     <>
-      {error?.status == 500 && toast.error('Server error')}
-      {isLoading && (
-        <div
-          className='d-flex justify-content-center align-items-center'
-          style={{ height: '100vh' }}
-        >
-          <Spinner animation='border' role='status'></Spinner>
-        </div>
-      )}
-
       <FormContainer>
-        <Row className='justify-content-md-center'>
-          <Col xs={12} md={6}>
-            <h2>Login</h2>
-            <Form onSubmit={submitHandler}>
-              <Form.Group controlId='email'>
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                  type='email'
-                  placeholder='Enter email'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+        <Row className='d-flex justify-content-md-center w-100 h-100'>
+          <Col
+            xs={12}
+            md={6}
+            className='w-100 d-flex flex-column justify-content-center align-items-center'
+          >
+            <h2 className='m-5'>Login</h2>
+            <Form onSubmit={submitHandler} className='w-100'>
+              <Form.Group controlId='email' className='mb-3'>
+                <FloatingLabel label='Email'>
+                  <Form.Control
+                    style={{
+                      border: '1px solid black',
+                    }}
+                    type='email'
+                    placeholder='Enter email'
+                    ref={emailRef}
+                  />
+                </FloatingLabel>
               </Form.Group>
 
-              <Form.Group controlId='password'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type='password'
-                  placeholder='Enter password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+              <Form.Group
+                controlId='password'
+                style={{
+                  position: 'relative',
+                }}
+              >
+                <FloatingLabel label='Password'>
+                  <Form.Control
+                    style={{
+                      border: '1px solid black',
+                    }}
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder='Enter password'
+                    ref={passwordRef}
+                  />
+                  <div
+                    onClick={toggleShowPassword}
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      right: '10px',
+                      transform: 'translateY(-50%)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </div>
+                </FloatingLabel>
               </Form.Group>
 
-              <Button type='submit' variant='primary'>
-                Sign In
+              <Button
+                type='submit'
+                variant='primary'
+                className='w-100 my-3 py-3 '
+                style={{
+                  background: '#AD3D17',
+                  borderRadius: '15px',
+                }}
+              >
+                {isLoading ? <Loader /> : 'Log In'}
               </Button>
             </Form>
 
             <Row className='py-3'>
               <Col>
-                New Customer? <Link to='/register'>Register</Link>
+                Dont registered yet? <Link to='/register'>Register here</Link>
               </Col>
             </Row>
           </Col>

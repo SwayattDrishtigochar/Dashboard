@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col, Spinner } from 'react-bootstrap';
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Spinner,
+  FloatingLabel,
+} from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import { useRegisterMutation } from '../slices/authApiSlice';
@@ -16,6 +23,8 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const [validated, setValidated] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -29,6 +38,10 @@ const RegisterScreen = () => {
   // }, [navigate, userInfo]);
 
   const submitHandler = async (e) => {
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    // }
     e.preventDefault();
     try {
       const res = await register({
@@ -39,100 +52,161 @@ const RegisterScreen = () => {
         email,
         password,
       }).unwrap();
-      dispatch(setCredentials({ ...res }));
+      dispatch(setCredentials({ ...res.data }));
+      toast.success(res.message);
       navigate('/otp');
     } catch (err) {
       toast.error(err?.data?.message || err?.error);
     }
+    setValidated(true);
   };
 
   return (
     <>
-      {isLoading && (
-        <div
-          className='d-flex justify-content-center align-items-center'
-          style={{ height: '100vh' }}
-        >
-          <Spinner animation='border' role='status'></Spinner>
-        </div>
-      )}
       <FormContainer>
-        <Row className='justify-content-md-center'>
-          <Col xs={12} md={6}>
-            <h2>Register</h2>
-            <Form onSubmit={submitHandler}>
-              <Form.Group controlId='firstName'>
-                <Form.Label>First Name</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter first name'
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
+        <Row className='d-flex justify-content-md-center w-100 h-100'>
+          <Col
+            xs={12}
+            md={6}
+            className='w-100 d-flex flex-column justify-content-center align-items-center'
+          >
+            <h2 className='my-4'>Register</h2>
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={submitHandler}
+              className='w-100'
+            >
+              <Row>
+                <Col>
+                  <Form.Group controlId='firstName'>
+                    <FloatingLabel label='First Name'>
+                      <Form.Control
+                        style={{
+                          border: '1px solid black',
+                        }}
+                        type='text'
+                        placeholder='Enter first name'
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId='lastName'>
+                    <FloatingLabel label='Last Name'>
+                      <Form.Control
+                        style={{
+                          border: '1px solid black',
+                        }}
+                        type='text'
+                        placeholder='Last Name'
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Form.Group controlId='phoneNumber' className='mt-3'>
+                <FloatingLabel label='Mobile Number'>
+                  <Form.Control
+                    style={{
+                      border: '1px solid black',
+                    }}
+                    type='text'
+                    placeholder='Enter phone number'
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </FloatingLabel>
               </Form.Group>
 
-              <Form.Group controlId='lastName'>
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter last name'
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group controlId='organizationName'>
-                <Form.Label>Organization Name</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter organization name'
-                  value={organizationName}
+              <Form.Group controlId='organizationName' className='mt-3'>
+                <Form.Select
+                  style={{
+                    border: '1px solid black',
+                    height: '60px',
+                  }}
                   onChange={(e) => setOrganizationName(e.target.value)}
-                />
+                >
+                  <option value=''>Select Company</option>
+                  <option value='64743f9bc481a6f675df7774'>Impcops</option>
+                </Form.Select>
               </Form.Group>
 
-              <Form.Group controlId='phoneNumber'>
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter phone number'
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
+              <Form.Group controlId='email' className='mt-3'>
+                <FloatingLabel label='Email'>
+                  <Form.Control
+                    style={{
+                      border: '1px solid black',
+                    }}
+                    type='email'
+                    placeholder='Enter email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </FloatingLabel>
               </Form.Group>
 
-              <Form.Group controlId='email'>
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                  type='email'
-                  placeholder='Enter email'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+              <Form.Group controlId='password' className='mt-3'>
+                <FloatingLabel label='Password'>
+                  <Form.Control
+                    style={{
+                      border: '1px solid black',
+                    }}
+                    type='password'
+                    placeholder='Enter password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </FloatingLabel>
               </Form.Group>
+              {/* <Form.Text id='passwordHelpBlock' muted>
+                Your password must be 8-20 characters long, contain letters and
+                numbers, and must not contain spaces, special characters, or
+                emoji.
+              </Form.Text> */}
 
-              <Form.Group controlId='password'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type='password'
-                  placeholder='Enter password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+              <Form.Group controlId='confirmPassword' className='mt-3'>
+                <FloatingLabel label='Confirm Password'>
+                  <Form.Control
+                    style={{
+                      border: '1px solid black',
+                    }}
+                    type='password'
+                    placeholder='Confirm password'
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </FloatingLabel>
               </Form.Group>
-
-              <Form.Group controlId='confirmPassword'>
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                  type='password'
-                  placeholder='Confirm password'
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+              {/* <Form.Group className='mt-3'>
+                <Form.Check
+                  required
+                  label='Agree to terms and conditions'
+                  feedback='You must agree before submitting.'
+                  feedbackType='invalid'
                 />
-              </Form.Group>
+              </Form.Group> */}
 
-              <Button type='submit' variant='primary'>
-                Register
+              <Button
+                type='submit'
+                variant='primary'
+                className='w-100 my-3 py-3 '
+                style={{
+                  background: '#AD3D17',
+                  borderRadius: '15px',
+                }}
+              >
+                {isLoading ? (
+                  <div className='d-flex justify-content-center align-items-center'>
+                    <Spinner animation='border' role='status'></Spinner>
+                  </div>
+                ) : (
+                  'Register'
+                )}
               </Button>
             </Form>
 

@@ -35,9 +35,15 @@ const SigninUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
     res.status(201).json({
+      _id: user._id,
       fname: user.fname,
       lname: user.lname,
       email: user.email,
+      phone: user.phone,
+      verified: user.verified,
+      company: user.company,
+      role: user.role,
+      companyStatus: user.companyStatus,
     });
   } else {
     res.status(401);
@@ -83,11 +89,18 @@ const SignupUSer = asyncHandler(async (req, res) => {
       throw new Error('Company not found');
     }
     res.status(201).json({
-      _id: user._id,
-      fname: user.fname,
-      lname: user.lname,
-      email: user.email,
-      verified: user.verified,
+      message: 'User Registered',
+      data: {
+        _id: user._id,
+        fname: user.fname,
+        lname: user.lname,
+        email: user.email,
+        phone: user.phone,
+        verified: user.verified,
+        company: user.company,
+        role: user.role,
+        companyStatus: user.companyStatus,
+      },
     });
   } else {
     res.status(400);

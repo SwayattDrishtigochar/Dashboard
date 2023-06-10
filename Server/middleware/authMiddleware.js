@@ -21,24 +21,22 @@ const protect = asyncHandler(async (req, res, next) => {
   let token;
 
   token = req.cookies.jwt;
+
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded.userId).select('-password');
-      if (user.verified !== true) {
-        res.status(401);
-        throw new Error('User not verified');
-      } else {
-        req.user = user;
-        next();
-      }
+
+      req.user = await User.findById(decoded.userId).select('-password');
+
+      next();
     } catch (error) {
+      console.error(error);
       res.status(401);
-      throw new Error(error);
+      throw new Error('Not authorized, token failed');
     }
   } else {
     res.status(401);
-    throw new Error('Not authorized , no token');
+    throw new Error('Not authorized, no token');
   }
 });
 
@@ -66,4 +64,13 @@ const isAdmin = asyncHandler(async (req, res, next) => {
   }
 });
 
-export { protect, isAdmin };
+const companyAuth = asyncHandler(async (req, res, next) => {
+  if (req.params.companyId === req.user.company) {
+    next();
+  } else {
+    res.status(403);
+    throw new Error('Not Authorized');
+  }
+});
+
+export { protect, isAdmin, companyAuth };

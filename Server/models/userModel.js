@@ -40,6 +40,12 @@ const userSchema = mongoose.Schema(
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Company',
+      required: true,
+    },
+    companyStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
     },
     email: {
       type: String,

@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
@@ -48,11 +49,21 @@ app.use('/api', companyRoutes);
  * @function
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
+ *
  */
-app.get('/', (req, res) => {
-  // Send a response with the message "Server is ready"
-  res.send('Server is ready');
-});
+
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, 'client/dist')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    // Send a response with the message "Server is ready"
+    res.send('Server is ready');
+  });
+}
 
 /**
  * Middleware for handling 404 errors (route not found).

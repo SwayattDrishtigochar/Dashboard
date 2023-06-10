@@ -11,13 +11,11 @@ const OtpSchema = mongoose.Schema(
     otp: {
       type: String,
       required: true,
-      trim: true,
     },
-    expireIn: {
-      type: String,
-      trim: true,
+    expireAt: {
+      type: Date,
+      required: true,
     },
-
     status: {
       type: String,
       trim: true,
@@ -29,14 +27,15 @@ const OtpSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+OtpSchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 
-OtpSchema.pre('save', async function (next) {
-  if (!this.isModified('otp')) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.otp = await bcrypt.hash(this.otp, salt);
-});
+// OtpSchema.pre('save', async function (next) {
+//   if (!this.isModified('otp')) {
+//     next();
+//   }
+//   const salt = await bcrypt.genSalt(10);
+//   this.otp = await bcrypt.hash(this.otp, salt);
+// });
 
 OtpSchema.methods.matchOtp = async function (enteredOtp) {
   return await bcrypt.compare(enteredOtp, this.otp);

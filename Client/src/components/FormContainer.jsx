@@ -1,15 +1,15 @@
-/* eslint-disable react/prop-types */
 import { Container, Row, Col } from 'react-bootstrap';
+import ImgUrl from '../assets/test.jpg';
 
 const FormContainer = ({ children }) => {
   return (
-    <Container fluid>
-      <Row>
-        <Col lg={6}>
-          <img src='path_to_image' alt='Image' className='img-fluid' />
+    <Container fluid className='p-3'>
+      <Row className='w-100'>
+        <Col lg={3} md={6} sm={12} className='p-0'>
+          <img src={ImgUrl} alt='Image' className='w-100  d-none d-md-block' />
         </Col>
-        <Col lg={6}>
-          <div className='form-container'>{children}</div>
+        <Col lg={6} md={6} sm={12} className=''>
+          {children}
         </Col>
       </Row>
     </Container>

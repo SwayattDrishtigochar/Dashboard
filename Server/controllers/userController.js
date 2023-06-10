@@ -51,6 +51,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.fname = req.body.fname || user.fname;
     user.lname = req.body.lname || user.lname;
     user.email = req.body.email || user.email;
+    user.phone = req.body.phone || user.phone;
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -60,10 +61,19 @@ const updateUser = asyncHandler(async (req, res) => {
       fname: updatedUSer.fname,
       lname: updatedUSer.lname,
       email: updatedUSer.email,
+      phone: updatedUSer.phone,
     });
   } else {
     res.status(404);
     throw new Error('User Not Found');
+  }
+});
+
+//TODO make the forgotpassword functionality
+const forgetPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
   }
 });
 
