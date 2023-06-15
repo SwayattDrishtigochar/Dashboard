@@ -1,10 +1,13 @@
 import React from 'react';
 import { Card, Row, Col, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { setRequests, setApproved } from '../slices/requestSlice';
 
 const RequestCard = ({ request }) => {
   const { userInfo } = useSelector((state) => state.auth);
+  const { requests, approved } = useSelector((state) => state.requests);
+  const dispatch = useDispatch();
 
   const acceptHandler = async () => {
     try {
@@ -20,10 +23,11 @@ const RequestCard = ({ request }) => {
       );
 
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      } else {
-        throw new Error('Failed to accept the request.');
+        dispatch(
+          setRequests(requests.filter((req) => req._id !== request._id))
+        );
+        dispatch(setApproved([...approved, request]));
+        toast.success('Request accepted');
       }
     } catch (error) {
       console.log(error);
@@ -42,11 +46,18 @@ const RequestCard = ({ request }) => {
           body: JSON.stringify({ action: 'reject' }),
         }
       );
+      if (response.ok) {
+        dispatch(
+          setRequests(requests.filter((req) => req._id !== request._id))
+        );
+        toast.success('Request rejected');
+      }
     } catch (error) {
       console.log(error);
       toast.error('An error occurred.');
     }
   };
+
   return (
     <Card
       style={{

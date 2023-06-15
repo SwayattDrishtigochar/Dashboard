@@ -100,4 +100,26 @@ const actionRequest = asyncHandler(async (req, res) => {
   }
 });
 
-export { RegisterCompany, getCompany, getRequests, actionRequest };
+const getApprovedUsers = asyncHandler(async (req, res) => {
+  const { companyId } = req.params;
+  const approvedUsers = await User.find({
+    companyStatus: 'approved',
+    company: companyId,
+  })
+    .populate('company', 'name')
+    .select('-password');
+  if (approvedUsers) {
+    res.status(200).json(approvedUsers);
+  } else {
+    res.status(404);
+    throw new Error('No approved users found');
+  }
+});
+
+export {
+  RegisterCompany,
+  getCompany,
+  getRequests,
+  actionRequest,
+  getApprovedUsers,
+};

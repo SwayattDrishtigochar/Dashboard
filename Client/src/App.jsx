@@ -8,7 +8,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <ToastContainer />
+      <ToastContainer theme='colored' />
       <Container>
         <Outlet />
       </Container>

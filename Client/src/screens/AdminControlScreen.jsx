@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
 import PendingApproval from '../components/PendingApproval';
+import ApprovedUsers from '../components/ApprovedUsers';
 
 const AdminControlScreen = () => {
   return (
@@ -9,7 +10,9 @@ const AdminControlScreen = () => {
         <Row>
           <PendingApproval />
         </Row>
-        <Row>Approved user</Row>
+        <Row>
+          <ApprovedUsers />
+        </Row>
       </Col>
     </Container>
   );

@@ -10,6 +10,8 @@ import {
   deleteUser,
   getUser,
   updateUser,
+  forgetPassword,
+  passwordReset,
 } from '../controllers/userController.js';
 import { protect, isAdmin } from '../middleware/authMiddleware.js';
 const router = express.Router();
@@ -29,6 +31,9 @@ router.get('/user', protect, getUser);
  * @returns {User} The updated user object.
  */
 router.put('/user', protect, updateUser);
+
+router.post('/user/forget-password', forgetPassword);
+router.post('/user/:userId/:token', passwordReset);
 
 /**
  * @route DELETE /user

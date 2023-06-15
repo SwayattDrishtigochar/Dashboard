@@ -3,7 +3,10 @@
  * @author Sunny Vedwal
  */
 import asyncHandler from 'express-async-handler';
+import crypto from 'crypto';
 import User from '../models/userModel.js';
+import Token from '../models/tokenModel.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 /**
  * @description Retrieves the profile information of the authenticated user.
@@ -69,13 +72,57 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-//TODO make the forgotpassword functionality
 const forgetPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  if (user) {
+  if (!user) {
+    res.status(404);
+    throw new Error('No user with this email');
   }
+  let token = await Token.findOne({
+    userId: user._id,
+  });
+  if (!token) {
+    token = await new Token({
+      userId: user._id,
+      token: crypto.randomBytes(32).toString('hex'),
+    }).save();
+  }
+  const link = `http://192.168.100.88:3000/password-reset/${user._id}/${token.token}`;
+  await sendEmail(user.email, 'Password reset', link);
+  res.status(200).json('password reset link sent to your email account');
 });
+
+const passwordReset = async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      res.status(400);
+      throw new Error('Invalid Link or Expired');
+    }
+
+    const token = await Token.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+    if (!token) {
+      res.status(400);
+      throw new Error('Link Expired');
+    }
+
+    user.password = password;
+    await user.save();
+
+    await token.deleteOne();
+
+    res.status(200).json('Success');
+  } catch (error) {
+    // console.log('Error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
 /**
  * @description Deletes the profile of the authenticated user.
@@ -102,4 +149,4 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { getUser, updateUser, deleteUser };
+export { getUser, updateUser, deleteUser, forgetPassword, passwordReset };

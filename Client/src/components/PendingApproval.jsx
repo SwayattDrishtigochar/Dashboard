@@ -19,12 +19,22 @@ const PendingApproval = () => {
   const { requests } = useSelector((state) => state.requests);
   const { data, isLoading, error } = useGetRequestsQuery(userInfo.company);
   const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (data) {
       dispatch(setRequests(data));
     }
   }, [data]);
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredRequests = requests.filter((request) => {
+    const fullName = `${request.fname} ${request.lname}`;
+    return fullName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   return (
     <Container
@@ -39,7 +49,12 @@ const PendingApproval = () => {
       <Row>
         <Col>
           <Form>
-            <Form.Control type='text' placeholder='Search' />
+            <Form.Control
+              type='text'
+              placeholder='Search'
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
           </Form>
         </Col>
         <Col>
@@ -50,7 +65,7 @@ const PendingApproval = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          requests.map((request) => {
+          filteredRequests.map((request) => {
             return (
               <Col key={request.email} sm={6} md={4} lg={3}>
                 <RequestCard request={request} />

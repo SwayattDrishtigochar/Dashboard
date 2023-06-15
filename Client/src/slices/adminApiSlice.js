@@ -9,7 +9,13 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getApprovedUsers: builder.query({
+      query: (companyId) => ({
+        url: `${ADMIN_URL}/${companyId}/users/approved`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetRequestsQuery } = adminApiSlice;
+export const { useGetRequestsQuery, useGetApprovedUsersQuery } = adminApiSlice;
