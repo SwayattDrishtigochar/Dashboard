@@ -5,6 +5,7 @@
 
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
+
 import User from '../models/userModel.js';
 
 /**
@@ -51,13 +52,13 @@ const protect = asyncHandler(async (req, res, next) => {
  * @throws {Error} - If no user is found or if the user is not authorized
  */
 const isAdmin = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-  if (!user) {
-    res.status(404);
-    throw new Error('No user found');
-  }
-  if (user.role === 'admin') {
-    next();
+  if (req.params.companyId === req.user.company.toString()) {
+    if (req.user.role === 'admin') {
+      next();
+    } else {
+      res.status(403);
+      throw new Error('Not Authorized');
+    }
   } else {
     res.status(403);
     throw new Error('Not Authorized');

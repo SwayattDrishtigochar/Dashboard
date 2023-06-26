@@ -1,14 +1,13 @@
-import React from 'react';
-import { Card, Row, Col, Button } from 'react-bootstrap';
+import { Card, Grid, Button, Typography, Divider } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setRequests, setApproved } from '../slices/requestSlice';
-
+import { setRequests, setApproved } from '../../slices/requestSlice';
+import useStyles from './styles';
 const RequestCard = ({ request }) => {
   const { userInfo } = useSelector((state) => state.auth);
   const { requests, approved } = useSelector((state) => state.requests);
   const dispatch = useDispatch();
-
+  const classes = useStyles();
   const acceptHandler = async () => {
     try {
       const response = await fetch(
@@ -34,6 +33,7 @@ const RequestCard = ({ request }) => {
       toast.error('An error occurred.');
     }
   };
+
   const rejectHandler = async () => {
     try {
       const response = await fetch(
@@ -46,6 +46,7 @@ const RequestCard = ({ request }) => {
           body: JSON.stringify({ action: 'reject' }),
         }
       );
+
       if (response.ok) {
         dispatch(
           setRequests(requests.filter((req) => req._id !== request._id))
@@ -59,33 +60,35 @@ const RequestCard = ({ request }) => {
   };
 
   return (
-    <Card
-      style={{
-        fontSize: '15px',
-      }}
-    >
-      <Card.Body>
-        {/* <Card.Text>Card 1 content</Card.Text> */}
-        <Row>
-          <Col>
-            <p>Name: {`${request.fname} ${request.lname}`}</p>
-            <p>Email: {request.email}</p>
-            <p>Phone: {request.phone}</p>
-          </Col>
-        </Row>
-      </Card.Body>
-      <Card.Footer>
-        <Row>
-          <Col className='d-flex justify-content-between'>
-            <Button variant='success' className='me-2' onClick={acceptHandler}>
-              Accept
-            </Button>
-            <Button variant='danger' onClick={rejectHandler}>
-              Reject
-            </Button>
-          </Col>
-        </Row>
-      </Card.Footer>
+    <Card className={classes.card}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant='body2'>
+            <strong>Name:</strong> {`${request.fname} ${request.lname}`}
+          </Typography>
+          <Typography variant='body2'>
+            <strong>Email:</strong> {request.email}
+          </Typography>
+          <Typography variant='body2'>
+            <strong>Phone:</strong> {request.phone}
+          </Typography>
+        </Grid>
+        <Divider style={{ width: '100%' }} />
+        <Grid item xs={12}>
+          <Grid container justifyContent='flex-end' spacing={1}>
+            <Grid item>
+              <Button variant='contained' onClick={acceptHandler}>
+                Accept
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant='contained' onClick={rejectHandler}>
+                Reject
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

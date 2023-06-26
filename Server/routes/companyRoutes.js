@@ -14,10 +14,20 @@ router.get('/company/:companyId', protect, getCompany);
 
 // router.post('/company', RegisterCompany);
 
-router.get('/company/:companyId/requests', protect, getRequests);
+router.get('/company/:companyId/requests', protect, isAdmin, getRequests);
 
-router.put('/company/:companyId/requests/:userId', protect, actionRequest);
+router.put(
+  '/company/:companyId/requests/:userId',
+  protect,
+  isAdmin,
+  actionRequest
+);
 
-router.get('/company/:companyId/users/approved', protect, getApprovedUsers);
+router.get(
+  '/company/:companyId/users/approved',
+  protect,
+  isAdmin,
+  getApprovedUsers
+);
 
 export default router;

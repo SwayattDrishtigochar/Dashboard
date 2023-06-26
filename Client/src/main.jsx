@@ -12,29 +12,34 @@ import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import App from './App.jsx';
 import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeScreen from './screens/HomeScreen.jsx';
-import LoginScreen from './screens/LoginScreen.jsx';
-import RegisterScreen from './screens/RegisterScreen.jsx';
-import OtpScreen from './screens/OtpScreen.jsx';
-import ProfileScreen from './screens/ProfileScreen.jsx';
+import LoginScreen from './screens/core/LoginScreen/LoginScreen.jsx';
+import RegisterScreen from './screens/core/RegisterScreen/RegisterScreen.jsx';
+import OtpScreen from './screens/core/OtpScreen/OtpScreen.jsx';
+import ProfileScreen from './screens/core/ProfileScreen/ProfileScreen.jsx';
 import PrivateRoute from './auth/PrivateRoute.jsx';
 import AdminRoute from './auth/AdminRoute.jsx';
 import DashboardScreen from './screens/DashboardScreen.jsx';
 import DashboardRoute from './auth/DashboardRoute.jsx';
-import PendingScreen from './screens/PendingScreen.jsx';
-import AdminControlScreen from './screens/AdminControlScreen.jsx';
-import PasswordResetScreen from './screens/PasswordResetScreen.jsx';
-import ForgotPassword from './screens/ForgotPassword.jsx';
-import Demo from './screens/core/Demo.jsx';
+import PendingScreen from './screens/core/PendingScreen/PendingScreen.jsx';
+import AdminControlScreen from './screens/admin/AdminControlScreen/AdminControlScreen.jsx';
+import PasswordResetScreen from './screens/core/PasswordResetScreen/PasswordResetScreen.jsx';
+import ForgotPassword from './screens/core/ForgotPasswordScreen/ForgotPasswordScreen.jsx';
 
-const theme = createTheme({});
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: 'rgb(173, 61, 23)',
+    },
+  },
+});
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
-      <Route path='/demo' element={<Demo />} />
+
       <Route path='/login' element={<LoginScreen />} />
       <Route path='/register' element={<RegisterScreen />} />
       <Route
@@ -43,7 +48,7 @@ const router = createBrowserRouter(
       />
       <Route path='/otp' element={<OtpScreen />} />
       <Route path='/forget-password' element={<ForgotPassword />} />
-      <Route path='/company' element={<AdminControlScreen />} />
+
       <Route path='' element={<PrivateRoute />}>
         <Route path='/pending' element={<PendingScreen />} />
         <Route path='' element={<DashboardRoute />}>
@@ -51,7 +56,9 @@ const router = createBrowserRouter(
         </Route>
         <Route path='/profile' element={<ProfileScreen />} />
       </Route>
-      <Route path='' element={<AdminRoute />}></Route>
+      <Route path='' element={<AdminRoute />}>
+        <Route path='/company/:companyId' element={<AdminControlScreen />} />
+      </Route>
     </Route>
   )
 );
