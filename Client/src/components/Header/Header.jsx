@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -14,7 +14,7 @@ import {
   AccountCircle,
   ExitToApp,
   Person,
-  Menu as MenuIcon,
+  Settings,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,7 +27,8 @@ const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
   const [logoutApiCall] = useLogoutMutation();
 
@@ -61,19 +62,22 @@ const Header = () => {
         {userInfo ? (
           <>
             <IconButton
-              aria-controls='menu-appbar'
+              aria-controls={open ? 'menu-appbar' : undefined}
               aria-haspopup='true'
+              aria-expanded={open ? 'true' : undefined}
               color='inherit'
               onClick={handleMenuOpen}
             >
               <AccountCircle />
             </IconButton>
             <Menu
-              id='menu-appbar'
               anchorEl={anchorEl}
-              keepMounted
               open={Boolean(anchorEl)}
+              id='menu-appbar'
               onClose={handleMenuClose}
+              onClick={handleMenuClose}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
               <MenuItem onClick={handleMenuClose}>
                 <Link
@@ -84,6 +88,17 @@ const Header = () => {
                   Profile
                 </Link>
               </MenuItem>
+              {userInfo.role === 'admin' ? (
+                <MenuItem onClick={handleMenuClose}>
+                  <Link
+                    to={`/company/${userInfo.company}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <Settings style={{ marginRight: '8px' }} />
+                    Settings
+                  </Link>
+                </MenuItem>
+              ) : null}
               <MenuItem onClick={handleLogout}>
                 <ExitToApp style={{ marginRight: '8px' }} />
                 Logout

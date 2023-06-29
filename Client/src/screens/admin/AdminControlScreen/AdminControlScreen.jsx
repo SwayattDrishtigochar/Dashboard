@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import PendingApproval from '../../../components/PendingApproval/PendingApproval';
 import ApprovedUsers from '../../../components/ApprovedUsers/ApprovedUsers';
 

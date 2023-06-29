@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Grid, TextField, Button, Box } from '@mui/material';
+import { Grid, TextField, Button, Box } from '@mui/material';
 import Loader from '../../components/Loader/Loader';
 import RequestCard from '../RequestCard/RequestCard';
 import { useGetRequestsQuery } from '../../slices/adminApiSlice';
@@ -9,6 +9,7 @@ import { setRequests } from '../../slices/requestSlice';
 const PendingApproval = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { requests } = useSelector((state) => state.requests);
+
   const { data, isLoading, error, refetch } = useGetRequestsQuery(
     userInfo?.company
   );
@@ -71,12 +72,16 @@ const PendingApproval = () => {
       <Grid container spacing={1} sx={{ mt: 3 }}>
         {isLoading ? (
           <Loader />
-        ) : (
-          filteredRequests.map((request) => (
+        ) : filteredRequests ? (
+          filteredRequests?.map((request) => (
             <Grid item key={request._id} xs={12} sm={6} md={3} lg={2}>
               <RequestCard request={request} />
             </Grid>
           ))
+        ) : (
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <h3>No Requests Found</h3>
+          </Grid>
         )}
       </Grid>
     </Box>

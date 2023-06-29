@@ -37,6 +37,8 @@ const LoginScreen = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
 
+  const isFormValid = email && password;
+
   useEffect(() => {
     if (userInfo) {
       navigate('/dash');
@@ -128,7 +130,7 @@ const LoginScreen = () => {
             type='submit'
             variant='contained'
             color='primary'
-            disabled={isLoading}
+            disabled={!isFormValid}
             className={classes.button}
             sx={{ mt: 2, mb: 1 }}
           >

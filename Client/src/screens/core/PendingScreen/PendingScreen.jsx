@@ -1,5 +1,5 @@
-import { Box, Container, Typography } from '@mui/material';
-import pendingImage from '../../../assets/pending.png';
+import { Box, Typography } from '@mui/material';
+// import pendingImage from '../../../assets/pending.png';
 import { useSelector } from 'react-redux';
 
 const PendingScreen = () => {
@@ -37,7 +37,6 @@ const PendingScreen = () => {
         viewBox='0 0 781 375'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
-        // xmlns:xlink='http://www.w3.org/1999/xlink'
       >
         <rect width='781' height='375' fill='url(#pattern0)' />
         <defs>

@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
-  Container,
   FormControl,
-  FormHelperText,
   TextField,
   Typography,
   InputAdornment,
@@ -35,6 +33,16 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const isFormValid =
+    firstName &&
+    lastName &&
+    organizationName &&
+    phoneNumber &&
+    email &&
+    password &&
+    confirmPassword &&
+    password === confirmPassword;
 
   const classes = useStyles();
 
@@ -198,6 +206,7 @@ const RegisterScreen = () => {
             variant='contained'
             color='primary'
             fullWidth
+            disabled={!isFormValid}
             className={classes.button}
             sx={{ mt: 2, mb: 1 }}
           >

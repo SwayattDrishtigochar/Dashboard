@@ -43,13 +43,19 @@ const ApprovedUsers = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {approved?.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{`${user.fname} ${user.lname}`}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    {/* Additional user details */}
+                {approved ? (
+                  approved.map((user, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{`${user.fname} ${user.lname}`}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      {/* Additional user details */}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell>No Approved Users</TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TableContainer>

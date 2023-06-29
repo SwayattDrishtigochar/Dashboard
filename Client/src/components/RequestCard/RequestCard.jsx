@@ -58,6 +58,7 @@ const RequestCard = ({ request }) => {
       toast.error('An error occurred.');
     }
   };
+  console.log(request);
 
   return (
     <Card className={classes.card}>
