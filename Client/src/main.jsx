@@ -26,6 +26,7 @@ import PendingScreen from './screens/core/PendingScreen/PendingScreen.jsx';
 import AdminControlScreen from './screens/admin/AdminControlScreen/AdminControlScreen.jsx';
 import PasswordResetScreen from './screens/core/PasswordResetScreen/PasswordResetScreen.jsx';
 import ForgotPassword from './screens/core/ForgotPasswordScreen/ForgotPasswordScreen.jsx';
+import Boiler from './screens/associate/Boiler.jsx';
 
 const theme = createTheme({
   palette: {
@@ -52,7 +53,7 @@ const router = createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/pending' element={<PendingScreen />} />
         <Route path='' element={<DashboardRoute />}>
-          <Route path='/dash' element={<DashboardScreen />} />
+          <Route path='/:companyId/dashboard' element={<Boiler />} />
         </Route>
         <Route path='/profile' element={<ProfileScreen />} />
       </Route>

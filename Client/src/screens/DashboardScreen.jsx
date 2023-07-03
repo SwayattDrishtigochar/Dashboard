@@ -1,4 +1,4 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { Typography, Box } from '@mui/material';
 import {
   LineChart,
   Line,
@@ -15,58 +15,62 @@ import {
 } from 'recharts';
 
 const DashboardScreen = () => {
-  // Sample data for the line chart
-  const lineChartData = [
-    { name: 'January', data: 12 },
-    { name: 'February', data: 19 },
-    { name: 'March', data: 3 },
-    { name: 'April', data: 5 },
-    { name: 'May', data: 2 },
-    { name: 'June', data: 3 },
+  // Sample time series temperature data
+  const temperatureData = [
+    { time: '00:00', temperature: 25 },
+    { time: '03:00', temperature: 23 },
+    { time: '06:00', temperature: 22 },
+    { time: '09:00', temperature: 26 },
+    { time: '12:00', temperature: 30 },
+    { time: '15:00', temperature: 28 },
+    { time: '18:00', temperature: 26 },
+    { time: '21:00', temperature: 24 },
   ];
 
   // Sample data for the bar chart
+  // Sample data for the bar chart
   const barChartData = [
-    { name: 'Category 1', value: 15 },
-    { name: 'Category 2', value: 7 },
-    { name: 'Category 3', value: 10 },
-    { name: 'Category 4', value: 5 },
+    { name: 'Machine 1', value: 120 },
+    { name: 'Machine 2', value: 80 },
+    { name: 'Machine 3', value: 65 },
+    { name: 'Machine 4', value: 65 },
   ];
 
   // Sample data for the pie chart
-  const pieChartData = [
-    { name: 'Category A', value: 30 },
-    { name: 'Category B', value: 20 },
-    { name: 'Category C', value: 50 },
+  const manufacturingData = [
+    { name: 'Production', value: 300 },
+    { name: 'Maintenance', value: 100 },
+    { name: 'Quality Control', value: 80 },
+    { name: 'Inventory', value: 200 },
   ];
 
   // Colors for the pie chart
   const pieChartColors = ['#8884d8', '#82ca9d', '#ffc658'];
 
   return (
-    <Container>
-      <Row className='my-4'>
-        <Col>
-          <h1 className='text-center'>Welcome to the Dashboard</h1>
-        </Col>
-      </Row>
-      <Row className='mb-4'>
-        <Col>
-          <h3 className='text-center'>Line Chart</h3>
-          <LineChart width={600} height={300} data={lineChartData}>
-            <XAxis dataKey='name' />
+    <Box>
+      <Typography variant='h4' align='center' gutterBottom>
+        Welcome to the Dashboard
+      </Typography>
+      <Box display='flex' justifyContent='space-between'>
+        <Box flexBasis='30%'>
+          <Typography variant='h6' align='center' gutterBottom>
+            Temperature Data
+          </Typography>
+          <LineChart width={400} height={300} data={temperatureData}>
+            <XAxis dataKey='time' />
             <YAxis />
             <CartesianGrid stroke='#eee' strokeDasharray='5 5' />
             <Tooltip />
             <Legend />
-            <Line type='monotone' dataKey='data' stroke='#8884d8' />
+            <Line type='monotone' dataKey='temperature' stroke='#8884d8' />
           </LineChart>
-        </Col>
-      </Row>
-      <Row className='mb-4'>
-        <Col>
-          <h3 className='text-center'>Bar Chart</h3>
-          <BarChart width={600} height={300} data={barChartData}>
+        </Box>
+        <Box flexBasis='30%'>
+          <Typography variant='h6' align='center' gutterBottom>
+            Running Hours
+          </Typography>
+          <BarChart width={400} height={300} data={barChartData}>
             <XAxis dataKey='name' />
             <YAxis />
             <CartesianGrid stroke='#eee' strokeDasharray='5 5' />
@@ -74,14 +78,14 @@ const DashboardScreen = () => {
             <Legend />
             <Bar dataKey='value' fill='#8884d8' />
           </BarChart>
-        </Col>
-      </Row>
-      <Row className='mb-4'>
-        <Col>
-          <h3 className='text-center'>Pie Chart</h3>
+        </Box>
+        <Box flexBasis='30%'>
+          <Typography variant='h6' align='center' gutterBottom>
+            Manufacturing Data
+          </Typography>
           <PieChart width={400} height={300}>
             <Pie
-              data={pieChartData}
+              data={manufacturingData}
               dataKey='value'
               nameKey='name'
               cx='50%'
@@ -90,7 +94,7 @@ const DashboardScreen = () => {
               fill='#8884d8'
               label
             >
-              {pieChartData.map((entry, index) => (
+              {manufacturingData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={pieChartColors[index % pieChartColors.length]}
@@ -100,9 +104,9 @@ const DashboardScreen = () => {
             <Tooltip />
             <Legend />
           </PieChart>
-        </Col>
-      </Row>
-    </Container>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

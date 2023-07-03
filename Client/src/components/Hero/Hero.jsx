@@ -29,7 +29,7 @@ const Hero = () => {
             variant='contained'
             color='primary'
             component={Link}
-            to='/dash'
+            to={`/${userInfo.company}/dashboard`}
             className={classes.button}
           >
             Dashboard

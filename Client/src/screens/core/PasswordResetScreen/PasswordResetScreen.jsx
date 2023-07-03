@@ -35,6 +35,7 @@ const PasswordResetScreen = () => {
         password: { password },
       }).unwrap();
       toast.success('Password changed successfully');
+      navigate('/login');
     } catch (err) {
       console.error(err);
     }

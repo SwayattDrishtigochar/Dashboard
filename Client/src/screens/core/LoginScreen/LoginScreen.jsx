@@ -41,7 +41,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/dash');
+      navigate(`/${userInfo.company}/dashboard`);
     }
   }, [navigate, userInfo]);
 
