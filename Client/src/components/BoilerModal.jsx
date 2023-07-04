@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Button,
   Dialog,
@@ -10,9 +11,60 @@ import {
   TextField,
   Typography,
   Box,
+  Checkbox,
 } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { addBoilerData } from '../slices/boilerSlice';
 
-const BoilerModal = ({ open, onClose, onSave, formData, handleChange }) => {
+const BoilerModal = ({ open, onClose }) => {
+  const [formData, setFormData] = useState({
+    steamPressure: '',
+    mainValveControls: '',
+    feedPump1: '',
+    feedPump2: '',
+    waterLevel: '',
+    feedWater: 'OFF',
+    blowDown: 'OFF',
+  });
+  const dispatch = useDispatch();
+
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    const newValue = type === 'checkbox' ? (checked ? 'ON' : 'OFF') : value;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: newValue,
+    }));
+  };
+
+  const handleSave = () => {
+    // Set the current time as the form submission time
+    const currentTime = new Date().toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    const updatedFormData = {
+      ...formData,
+      time: currentTime,
+    };
+
+    // Perform any necessary operations with the form data
+    console.log(updatedFormData);
+
+    dispatch(addBoilerData(updatedFormData));
+    setFormData({
+      steamPressure: '',
+      mainValveControls: '',
+      feedPump1: '',
+      feedPump2: '',
+      waterLevel: '',
+      feedWater: 'OFF',
+      blowDown: 'OFF',
+    });
+
+    onClose();
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Add Data</DialogTitle>
@@ -26,38 +78,46 @@ const BoilerModal = ({ open, onClose, onSave, formData, handleChange }) => {
           margin='normal'
           type='number'
         />
-        <Box display={'flex'} alignItems={'center'}>
+
+        <Box mt={2} display='flex' alignItems='center'>
           <Typography variant='subtitle1'>Main Control Valve:</Typography>
           <RadioGroup
-            sx={{
-              margin: '0 50px',
-            }}
             name='mainValveControls'
             value={formData.mainValveControls}
             onChange={handleChange}
             row
           >
-            <FormControlLabel value='on' control={<Radio />} label='On' />
-            <FormControlLabel value='off' control={<Radio />} label='Off' />
+            <FormControlLabel value='ON' control={<Radio />} label='ON' />
+            <FormControlLabel value='OFF' control={<Radio />} label='OFF' />
           </RadioGroup>
         </Box>
 
-        <TextField
-          name='feedPump1'
-          label='Feed Pump Number 1'
-          value={formData.feedPump1}
-          onChange={handleChange}
-          fullWidth
-          margin='normal'
-        />
-        <TextField
-          name='feedPump2'
-          label='Feed Pump Number 2'
-          value={formData.feedPump2}
-          onChange={handleChange}
-          fullWidth
-          margin='normal'
-        />
+        <Box mt={2} display='flex' alignItems='center'>
+          <Typography variant='subtitle1'>Feed Pump Number 1:</Typography>
+          <RadioGroup
+            name='feedPump1'
+            value={formData.feedPump1}
+            onChange={handleChange}
+            row
+          >
+            <FormControlLabel value='ON' control={<Radio />} label='ON' />
+            <FormControlLabel value='OFF' control={<Radio />} label='OFF' />
+          </RadioGroup>
+        </Box>
+
+        <Box mt={2} display='flex' alignItems='center'>
+          <Typography variant='subtitle1'>Feed Pump Number 2:</Typography>
+          <RadioGroup
+            name='feedPump2'
+            value={formData.feedPump2}
+            onChange={handleChange}
+            row
+          >
+            <FormControlLabel value='ON' control={<Radio />} label='ON' />
+            <FormControlLabel value='OFF' control={<Radio />} label='OFF' />
+          </RadioGroup>
+        </Box>
+
         <TextField
           name='waterLevel'
           label='Water Level'
@@ -66,26 +126,36 @@ const BoilerModal = ({ open, onClose, onSave, formData, handleChange }) => {
           fullWidth
           margin='normal'
         />
-        <TextField
-          name='feedWater'
-          label='Feed Water Analysis'
-          value={formData.feedWater}
-          onChange={handleChange}
-          fullWidth
-          margin='normal'
-        />
-        <TextField
-          name='blowDown'
-          label='Blow Down Analysis'
-          value={formData.blowDown}
-          onChange={handleChange}
-          fullWidth
-          margin='normal'
-        />
+
+        <Box mt={2}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name='feedWater'
+                checked={formData.feedWater === 'ON'}
+                onChange={handleChange}
+                color='primary'
+              />
+            }
+            label='Feed Water Analysis'
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                name='blowDown'
+                checked={formData.blowDown === 'ON'}
+                onChange={handleChange}
+                color='primary'
+              />
+            }
+            label='Blow Down Analysis'
+          />
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onSave} variant='contained' color='primary'>
+        <Button onClick={handleSave} variant='contained' color='primary'>
           Save
         </Button>
       </DialogActions>

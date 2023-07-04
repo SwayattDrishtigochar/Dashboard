@@ -10,23 +10,12 @@ import {
   Box,
   Button,
 } from '@mui/material';
-import { addBoilerData } from '../../slices/boilerSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import BoilerModal from '../../components/BoilerModal';
 
 const Boiler = () => {
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    steamPressure: '',
-    mainValveControls: '',
-    feedPump1: '',
-    feedPump2: '',
-    waterLevel: '',
-    feedWater: '',
-    blowDown: '',
-  });
 
-  const dispatch = useDispatch();
   const boilerData = useSelector((state) => state.boiler);
 
   const handleOpen = () => {
@@ -35,33 +24,6 @@ const Boiler = () => {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSave = () => {
-    // Set the current time as the form submission time
-    const currentTime = new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-    const updatedFormData = {
-      ...formData,
-      time: currentTime,
-    };
-
-    // Perform any necessary operations with the form data
-    console.log(updatedFormData);
-
-    dispatch(addBoilerData(updatedFormData));
-
-    handleClose();
   };
 
   return (
@@ -150,13 +112,7 @@ const Boiler = () => {
         Add
       </Button>
 
-      <BoilerModal
-        open={open}
-        onClose={handleClose}
-        onSave={handleSave}
-        formData={formData}
-        handleChange={handleChange}
-      />
+      <BoilerModal open={open} onClose={handleClose} />
     </>
   );
 };
