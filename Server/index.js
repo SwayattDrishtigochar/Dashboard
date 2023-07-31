@@ -15,17 +15,17 @@ import connectDB from './config/db.js';
 const port = process.env.PORT || 8000;
 
 connectDB();
-app.use(
-  cors({
-    origin: '*',
-  })
-);
 
 // Create an instance of Express application
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 
 /**
  * Middleware for handling authentication routes.
