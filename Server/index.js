@@ -52,18 +52,20 @@ app.use('/api', companyRoutes);
  *
  */
 
-if (process.env.NODE_ENV === 'production') {
-  const __dirname = path.resolve();
-  app.use(express.static(path.join(__dirname, 'client/dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
-  });
-} else {
-  app.get('/', (req, res) => {
-    // Send a response with the message "Server is ready"
-    res.send('Server is ready');
-  });
-}
+// if (process.env.NODE_ENV === 'production') {
+//   const __dirname = path.resolve();
+//   app.use(express.static(path.join(__dirname, 'client/dist')));
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
+//   });
+// } else {
+
+// }
+
+app.get('/', (req, res) => {
+  // Send a response with the message "Server is ready"
+  res.send('Server is ready');
+});
 
 /**
  * Middleware for handling 404 errors (route not found).
