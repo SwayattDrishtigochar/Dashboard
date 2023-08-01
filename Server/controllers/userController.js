@@ -1,22 +1,8 @@
-/**
- * @module Controller/User
- * @author Sunny Vedwal
- */
 import asyncHandler from 'express-async-handler';
 import crypto from 'crypto';
 import User from '../models/userModel.js';
 import Token from '../models/tokenModel.js';
 import { sendEmail } from '../utils/sendEmail.js';
-
-/**
- * @description Retrieves the profile information of the authenticated user.
- * @function getUser
- * @async
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} - User profile information
- * @throws {Error} - If user is not found or server error occurs
- */
 
 const getUser = asyncHandler(async (req, res) => {
   try {
@@ -39,15 +25,7 @@ const getUser = asyncHandler(async (req, res) => {
     console.log(error);
   }
 });
-/**
- * @description Updates the profile information of the authenticated user.
- * @function updateUser
- * @async
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} - Updated user profile information
- * @throws {Error} - If user is not found
- */
+
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -124,14 +102,6 @@ const passwordReset = async (req, res) => {
   }
 };
 
-/**
- * @description Deletes the profile of the authenticated user.
- * @function deleteUser
- * @async
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @throws {Error} - If user is not found or password does not match
- */
 const deleteUser = asyncHandler(async (req, res) => {
   const { password } = req.body;
   const user = await User.findById(req.user._id);

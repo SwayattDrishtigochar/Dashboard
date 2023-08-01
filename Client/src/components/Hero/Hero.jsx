@@ -54,7 +54,8 @@ const Hero = () => {
               >
                 Login
               </Button>
-              <Button
+              {/* {//!Disabled for MVP} */}
+              {/* <Button
                 variant='contained'
                 color='primary'
                 component={Link}
@@ -62,7 +63,7 @@ const Hero = () => {
                 className={classes.button}
               >
                 Register
-              </Button>
+              </Button> */}
             </Box>
           </>
         )}

@@ -55,7 +55,7 @@ const OtpScreen = () => {
       }).unwrap();
 
       toast.success('Email Verified');
-      navigate('/dash');
+      navigate('/');
     } catch (err) {
       toast.error(err?.data?.message || err?.error);
     }

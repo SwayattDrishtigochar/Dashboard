@@ -14,7 +14,7 @@ router.get('/company/:companyId', protect, getCompany);
 
 // router.post('/company', RegisterCompany);
 
-router.get('/company/:companyId/requests', protect, isAdmin, getRequests);
+router.get('/company/:companyId/requests', isAdmin, getRequests);
 
 router.put(
   '/company/:companyId/requests/:userId',

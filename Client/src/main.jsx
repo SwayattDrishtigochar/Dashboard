@@ -52,6 +52,7 @@ const router = createBrowserRouter(
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/pending' element={<PendingScreen />} />
+        <Route path='/:companyId/boiler' element={<Boiler />} />
         <Route path='' element={<DashboardRoute />}>
           <Route path='/:companyId/dashboard' element={<DashboardScreen />} />
         </Route>

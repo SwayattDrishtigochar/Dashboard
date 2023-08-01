@@ -111,10 +111,11 @@ const Header = () => {
               <ExitToApp style={{ marginRight: '8px' }} />
               Sign In
             </Button>
-            <Button color='inherit' component={Link} to='/register'>
+            {/* //!Disabled for MVP */}
+            {/* <Button color='inherit' component={Link} to='/register'>
               <Person style={{ marginRight: '8px' }} />
               Sign Up
-            </Button>
+            </Button> */}
           </>
         )}
       </Toolbar>

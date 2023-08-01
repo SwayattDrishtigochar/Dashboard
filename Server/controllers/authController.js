@@ -1,8 +1,3 @@
-/**
- * @module AuthController
- * @author Sunny Vedwal
- */
-
 import nodemailer from 'nodemailer';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
@@ -20,15 +15,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/**
- * @description This function authenticates the user with the provided email and password. If the authentication is successful, it generates a token and returns the user information along with the token.
- * @function SigninUser
- * @async
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} - User information and token
- * @throws {Error} - If invalid email or password
- */
 const SigninUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -51,16 +37,6 @@ const SigninUser = asyncHandler(async (req, res) => {
   }
 });
 
-/**
- * Register a new user
- * @description This function allows a new user to register by providing their name, company, email, and password. It checks if the user already exists and, if not, creates a new user with the provided information. Upon successful registration, it generates a token and returns the newly registered user information along with the token.
- * @function SignupUser
- * @async
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} - Newly registered user information and token
- * @throws {Error} - If user already exists or invalid user data
- */
 const SignupUSer = asyncHandler(async (req, res) => {
   const { fname, lname, phone, company, email, password } = req.body;
 
@@ -108,15 +84,6 @@ const SignupUSer = asyncHandler(async (req, res) => {
   }
 });
 
-/**
- * @description  This function logs out the user by clearing the JWT token stored in the cookie. After successful logout, it sends a success message.
- *
- * @function SignoutUser
- * @async
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} - Success message
- */
 const SignoutUSer = asyncHandler(async (req, res) => {
   res.cookie('jwt', '', {
     expires: new Date(0),

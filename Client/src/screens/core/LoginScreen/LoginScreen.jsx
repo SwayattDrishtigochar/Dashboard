@@ -41,7 +41,11 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate(`/${userInfo.company}/dashboard`);
+      if (userInfo.role === 'admin') {
+        navigate(`/${userInfo.company}/dashboard`);
+      } else {
+        navigate(`/${userInfo.company}/boiler`);
+      }
     }
   }, [navigate, userInfo]);
 
@@ -50,7 +54,7 @@ const LoginScreen = () => {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate('/dash');
+      navigate('/');
       toast.success('Login Successful');
     } catch (err) {
       toast.error(err?.data?.message || err?.error);
@@ -136,10 +140,11 @@ const LoginScreen = () => {
           >
             {isLoading ? <Loader /> : 'Log In'}
           </Button>
-
+          {/* //!Disabled for MVP */}
+          {/* 
           <Typography variant='body1' textAlign='center' mt={2}>
             Dont have an account? <Link to='/register'>Register here</Link>
-          </Typography>
+          </Typography> */}
         </form>
       </Box>
     </FormContainer>
