@@ -21,7 +21,7 @@ connectDB();
 const app = express();
 app.use(
   cors({
-    origin: 'https://dashboard-ndxx.onrender.com',
+    origin: 'https://impcops.netlify.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
