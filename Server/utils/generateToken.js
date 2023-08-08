@@ -6,7 +6,7 @@ const generateToken = async (res, userId) => {
     const token = jwt.sign({ userId }, process.env.JWT_SECRET);
 
     // Set a cookie with the JWT.
-    res.cookie('jwt_token', token, {
+    await res.cookie('jwt_token', token, {
       secure: true,
       httpOnly: true,
       sameSite: 'none',
