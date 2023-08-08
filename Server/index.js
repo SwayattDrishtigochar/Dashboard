@@ -10,6 +10,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
 import companyRoutes from './routes/companyRoutes.js';
+import BoilerRoutes from './routes/BoilerRoute.js';
 import connectDB from './config/db.js';
 // Set the port for the server
 const port = process.env.PORT || 8000;
@@ -20,8 +21,9 @@ connectDB();
 const app = express();
 app.use(
   cors({
-    origin: '*',
-    methods: '*',
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -34,6 +36,7 @@ app.use('/api', otpRoutes);
 app.use('/api', userRoutes);
 
 app.use('/api', companyRoutes);
+app.use('/api', BoilerRoutes);
 
 // if (process.env.NODE_ENV === 'production') {
 //   const __dirname = path.resolve();

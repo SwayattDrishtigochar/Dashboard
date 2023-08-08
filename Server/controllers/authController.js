@@ -1,17 +1,17 @@
-import nodemailer from 'nodemailer';
-import asyncHandler from 'express-async-handler';
-import User from '../models/userModel.js';
-import generateToken from '../utils/generateToken.js';
-import Company from '../models/companyModel.js';
-import Otp from '../models/OtpModel.js';
+import nodemailer from "nodemailer";
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+import generateToken from "../utils/generateToken.js";
+import Company from "../models/companyModel.js";
+import Otp from "../models/OtpModel.js";
 
-import { sendOtp } from './otpController.js';
+import { sendOtp } from "./otpController.js";
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-    user: 'sunnyvedwal@gmail.com',
-    pass: 'uepoyghnamyzcsbw',
+    user: "sunnyvedwal@gmail.com",
+    pass: "uepoyghnamyzcsbw",
   },
 });
 
@@ -20,7 +20,8 @@ const SigninUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
-    res.status(201).json({
+
+    res.status(200).json({
       _id: user._id,
       fname: user.fname,
       lname: user.lname,
@@ -33,7 +34,7 @@ const SigninUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401);
-    throw new Error('Invalid email or password');
+    throw new Error("Invalid email or password");
   }
 });
 
@@ -43,7 +44,7 @@ const SignupUSer = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
-    throw new Error('User already exists');
+    throw new Error("User already exists");
   }
   const user = await User.create({
     fname,
@@ -62,10 +63,10 @@ const SignupUSer = asyncHandler(async (req, res) => {
       await company.save();
     } else {
       res.status(400);
-      throw new Error('Company not found');
+      throw new Error("Company not found");
     }
     res.status(201).json({
-      message: 'User Registered',
+      message: "User Registered",
       data: {
         _id: user._id,
         fname: user.fname,
@@ -80,16 +81,16 @@ const SignupUSer = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new Error("Invalid user data");
   }
 });
 
 const SignoutUSer = asyncHandler(async (req, res) => {
-  res.cookie('jwt', '', {
+  res.cookie("jwt", "", {
     expires: new Date(0),
     httpOnly: true,
   });
-  res.status(200).json({ message: 'User logged out' });
+  res.status(200).json({ message: "User logged out" });
 });
 
 export { SigninUser, SignupUSer, SignoutUSer };

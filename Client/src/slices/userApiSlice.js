@@ -13,6 +13,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${USERS_URL}`,
         method: 'PUT',
+        credentials: 'include',
         body: data,
       }),
     }),

@@ -5,7 +5,6 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(0),
     margin: 0,
     width: '100%',
-    maxHeight: '100vh',
   },
   image: {
     width: '100%',

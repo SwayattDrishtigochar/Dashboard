@@ -88,7 +88,7 @@ const Header = () => {
                   Profile
                 </Link>
               </MenuItem>
-              {userInfo.role === 'admin' ? (
+              {/* {userInfo.role === 'admin' ? (
                 <MenuItem onClick={handleMenuClose}>
                   <Link
                     to={`/company/${userInfo.company}`}
@@ -98,7 +98,7 @@ const Header = () => {
                     Settings
                   </Link>
                 </MenuItem>
-              ) : null}
+              ) : null} */}
               <MenuItem onClick={handleLogout}>
                 <ExitToApp style={{ marginRight: '8px' }} />
                 Logout

@@ -17,6 +17,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import {
   LineChart,
   Line,
@@ -161,6 +162,7 @@ const DashboardScreen = () => {
           <Typography variant='h6' noWrap component='div'>
             Dashboard
           </Typography>
+          <AccountCircle />
         </Toolbar>
       </AppBar>
       <Drawer variant='permanent' open={open}>

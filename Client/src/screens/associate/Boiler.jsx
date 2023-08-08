@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   TableContainer,
   Table,
@@ -11,12 +11,30 @@ import {
   Button,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import BoilerModal from '../../components/BoilerModal';
+import BoilerModal from '../../components/BoilerModal/BoilerModal';
+import {
+  useGetBoilerDataQuery,
+  useDeleteBoilerDataMutation,
+} from '../../slices/boilerApiSlice';
+import { addBoilerData } from '../../slices/boilerSlice';
+import Loader from '../../components/Loader/Loader';
+import { toast } from 'react-toastify';
 
 const Boiler = () => {
   const [open, setOpen] = useState(false);
 
-  const boilerData = useSelector((state) => state.boiler);
+  const { boilerData } = useSelector((state) => state.boiler);
+
+  const { data, isLoading, refetch } = useGetBoilerDataQuery();
+  const [deleteBoilerData, response] = useDeleteBoilerDataMutation();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (data) {
+      dispatch(addBoilerData(data.data));
+    }
+  }, [data, dispatch]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -24,7 +42,12 @@ const Boiler = () => {
 
   const handleClose = () => {
     setOpen(false);
+    refetch();
   };
+  // console.log(boilerData);
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -67,7 +90,7 @@ const Boiler = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {boilerData.map((data, index) => (
+              {boilerData?.map((data, index) => (
                 <TableRow key={index}>
                   <TableCell style={{ textAlign: 'center' }}>
                     {data.time}
@@ -92,6 +115,24 @@ const Boiler = () => {
                   </TableCell>
                   <TableCell style={{ textAlign: 'center' }}>
                     {data.blowDown}
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    <Button color='primary' variant='outlined'>
+                      Edit
+                    </Button>
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        window.confirm('Confirm Delete');
+                        const data = await deleteBoilerData(data._id);
+                        console.log(data);
+                        refetch();
+                      }}
+                    >
+                      Delete
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
