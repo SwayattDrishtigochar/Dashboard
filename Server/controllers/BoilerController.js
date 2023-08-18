@@ -31,7 +31,7 @@ const getBoilerData = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     res.status(500);
-    throw new Error(error);
+    throw new Error('Error Getting Data');
   }
 });
 
@@ -44,8 +44,8 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       feedPump1,
       feedPump2,
       waterLevel,
-      feedWater,
-      blowDown,
+      // feedWater,
+      // blowDown,
       time,
     } = req.body;
     // console.log(req.body);
@@ -57,18 +57,17 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       feedPump1,
       feedPump2,
       waterLevel,
-      feedWater,
-      blowDown,
+      // feedWater,
+      // blowDown,
       time,
     });
 
     res.status(200).json({
-      data: newBoilerData,
+      message: 'Successfully added data',
     });
   } catch (error) {
     res.status(400);
-    // console.log(error);
-    throw new Error('Invalid data');
+    throw new Error('Invalid Data Input');
   }
 });
 
@@ -119,4 +118,48 @@ const editBoilerData = async (req, res) => {
   }
 };
 
-export { getBoilerData, saveBoilerData, deleteBoilerData, editBoilerData };
+const getAllBoilerData = asyncHandler(async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit) || 10; // Default to 10 items per page if not provided
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const totalDocuments = await Boiler.countDocuments();
+
+    const allBoilers = await Boiler.find().skip(startIndex).limit(limit);
+
+    const pagination = {};
+
+    if (endIndex < totalDocuments) {
+      pagination.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+
+    if (startIndex > 0) {
+      pagination.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+
+    res.status(200).json({
+      data: allBoilers,
+      pagination: pagination,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error('No DATA');
+  }
+});
+
+export {
+  getBoilerData,
+  saveBoilerData,
+  deleteBoilerData,
+  editBoilerData,
+  getAllBoilerData,
+};

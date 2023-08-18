@@ -2,28 +2,28 @@ import asyncHandler from 'express-async-handler';
 import Company from '../models/companyModel.js';
 import User from '../models/userModel.js';
 
-const RegisterCompany = asyncHandler(async (req, res) => {
-  const { name, location } = req.body;
-  const companyExists = await Company.findOne({ name });
-  if (companyExists) {
-    res.status(400);
-    throw new Error('Company already exists');
-  }
-  const company = await Company.create({
-    name,
-    location: [location],
-  });
-  if (company) {
-    res.status(201).json({
-      _id: company._id,
-      name: company.name,
-      location: company.location,
-    });
-  } else {
-    res.status(400);
-    throw new Error('Invalid data');
-  }
-});
+// const RegisterCompany = asyncHandler(async (req, res) => {
+//   const { name, location } = req.body;
+//   const companyExists = await Company.findOne({ name });
+//   if (companyExists) {
+//     res.status(400);
+//     throw new Error('Company already exists');
+//   }
+//   const company = await Company.create({
+//     name,
+//     location: [location],
+//   });
+//   if (company) {
+//     res.status(201).json({
+//       _id: company._id,
+//       name: company.name,
+//       location: company.location,
+//     });
+//   } else {
+//     res.status(400);
+//     throw new Error('Invalid data');
+//   }
+// });
 
 const getCompany = asyncHandler(async (req, res) => {
   const { companyId } = req.params;
@@ -101,10 +101,4 @@ const getApprovedUsers = asyncHandler(async (req, res) => {
   }
 });
 
-export {
-  RegisterCompany,
-  getCompany,
-  getRequests,
-  actionRequest,
-  getApprovedUsers,
-};
+export { getCompany, getRequests, actionRequest, getApprovedUsers };
