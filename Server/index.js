@@ -21,7 +21,7 @@ connectDB();
 const app = express();
 app.use(
   cors({
-    origin: process.env.BASE_URL,
+    origin: 'https://impcops.netlify.app/',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
