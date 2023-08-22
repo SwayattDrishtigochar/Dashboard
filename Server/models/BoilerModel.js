@@ -22,14 +22,14 @@ const boilerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  feedWater: {
-    type: String,
-    required: true,
-  },
-  blowDown: {
-    type: String,
-    required: true,
-  },
+  // feedWater: {
+  //   type: String,
+  //   required: true,
+  // },
+  // blowDown: {
+  //   type: String,
+  //   required: true,
+  // },
   time: {
     type: Date,
     required: true,

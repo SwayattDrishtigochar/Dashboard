@@ -32,6 +32,6 @@
     "docdash": "^2.0.1",
     "jsdoc": "^4.0.2",
     "jsdoc-to-markdown": "^8.0.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1"
   }
 }

@@ -1,6 +1,5 @@
 import express from 'express';
 import {
-  RegisterCompany,
   getCompany,
   getRequests,
   actionRequest,
@@ -10,9 +9,7 @@ import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/company/:companyId', protect, getCompany);
-
-// router.post('/company', RegisterCompany);
+router.get('/company/:companyId', protect, isAdmin, getCompany);
 
 router.get('/company/:companyId/requests', isAdmin, getRequests);
 

@@ -4,12 +4,14 @@ import {
   deleteBoilerData,
   editBoilerData,
   getBoilerData,
+  getAllBoilerData,
 } from '../controllers/BoilerController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.get('/boiler', protect, getBoilerData);
+router.get('/boiler/data', protect, getAllBoilerData);
 // Save boiler data
 router.post('/boiler', protect, saveBoilerData);
 

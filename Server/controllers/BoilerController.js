@@ -31,7 +31,7 @@ const getBoilerData = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     res.status(500);
-    throw new Error(error);
+    throw new Error('Error Getting Data');
   }
 });
 
@@ -44,8 +44,8 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       feedPump1,
       feedPump2,
       waterLevel,
-      feedWater,
-      blowDown,
+      // feedWater,
+      // blowDown,
       time,
     } = req.body;
     // console.log(req.body);
@@ -57,18 +57,17 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       feedPump1,
       feedPump2,
       waterLevel,
-      feedWater,
-      blowDown,
+      // feedWater,
+      // blowDown,
       time,
     });
 
     res.status(200).json({
-      data: newBoilerData,
+      message: 'Successfully added data',
     });
   } catch (error) {
     res.status(400);
-    // console.log(error);
-    throw new Error('Invalid data');
+    throw new Error('Invalid Data Input');
   }
 });
 
@@ -119,4 +118,80 @@ const editBoilerData = async (req, res) => {
   }
 };
 
-export { getBoilerData, saveBoilerData, deleteBoilerData, editBoilerData };
+const getAllBoilerData = asyncHandler(async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const query = {};
+
+    // Check if startDate and endDate query parameters are provided
+    if (req.query.startDate && req.query.endDate) {
+      // Convert startDate and endDate strings to Date objects
+      const startDate = new Date(req.query.startDate);
+      const endDate = new Date(req.query.endDate);
+
+      // Add date range query to the main query
+      query.time = { $gte: startDate, $lte: endDate };
+    } else if (req.query.date) {
+      // If only a single date is provided, filter data for that specific date
+      const date = new Date(req.query.date);
+      const nextDate = new Date(date);
+      nextDate.setDate(date.getDate() + 1);
+
+      query.time = { $gte: date, $lt: nextDate };
+    }
+
+    const totalDocuments = await Boiler.countDocuments(query);
+
+    const allBoilers = await Boiler.find(query)
+      .sort({ time: -1 })
+      .skip(startIndex)
+      .limit(limit);
+    const boilerDataIST = allBoilers.map((data) => {
+      const dateIST = new Date(data.time).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+      });
+
+      return {
+        ...data._doc,
+        time: dateIST,
+      };
+    });
+
+    const pagination = {};
+
+    if (endIndex < totalDocuments) {
+      pagination.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+
+    if (startIndex > 0) {
+      pagination.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+
+    res.status(200).json({
+      data: boilerDataIST,
+      pagination: pagination,
+      totalDocuments: totalDocuments,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error('No DATA');
+  }
+});
+
+export {
+  getBoilerData,
+  saveBoilerData,
+  deleteBoilerData,
+  editBoilerData,
+  getAllBoilerData,
+};
