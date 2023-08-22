@@ -120,15 +120,46 @@ const editBoilerData = async (req, res) => {
 
 const getAllBoilerData = asyncHandler(async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
-    const limit = parseInt(req.query.limit) || 10; // Default to 10 items per page if not provided
-
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const totalDocuments = await Boiler.countDocuments();
+    const query = {};
 
-    const allBoilers = await Boiler.find().skip(startIndex).limit(limit);
+    // Check if startDate and endDate query parameters are provided
+    if (req.query.startDate && req.query.endDate) {
+      // Convert startDate and endDate strings to Date objects
+      const startDate = new Date(req.query.startDate);
+      const endDate = new Date(req.query.endDate);
+
+      // Add date range query to the main query
+      query.time = { $gte: startDate, $lte: endDate };
+    } else if (req.query.date) {
+      // If only a single date is provided, filter data for that specific date
+      const date = new Date(req.query.date);
+      const nextDate = new Date(date);
+      nextDate.setDate(date.getDate() + 1);
+
+      query.time = { $gte: date, $lt: nextDate };
+    }
+
+    const totalDocuments = await Boiler.countDocuments(query);
+
+    const allBoilers = await Boiler.find(query)
+      .sort({ time: -1 })
+      .skip(startIndex)
+      .limit(limit);
+    const boilerDataIST = allBoilers.map((data) => {
+      const dateIST = new Date(data.time).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+      });
+
+      return {
+        ...data._doc,
+        time: dateIST,
+      };
+    });
 
     const pagination = {};
 
@@ -147,8 +178,9 @@ const getAllBoilerData = asyncHandler(async (req, res) => {
     }
 
     res.status(200).json({
-      data: allBoilers,
+      data: boilerDataIST,
       pagination: pagination,
+      totalDocuments: totalDocuments,
     });
   } catch (error) {
     res.status(500);
