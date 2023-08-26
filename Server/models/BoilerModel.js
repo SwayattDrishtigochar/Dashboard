@@ -30,6 +30,11 @@ const boilerSchema = new mongoose.Schema({
   //   type: String,
   //   required: true,
   // },
+
+  woodAmount: {
+    type: Number,
+  },
+
   time: {
     type: Date,
     required: true,

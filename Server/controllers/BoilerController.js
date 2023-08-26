@@ -46,9 +46,10 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       waterLevel,
       // feedWater,
       // blowDown,
+      woodAmount,
       time,
     } = req.body;
-    // console.log(req.body);
+    console.log(req.body);
 
     // Create a new instance of the Boiler model with the extracted form data
     const newBoilerData = await Boiler.create({
@@ -59,6 +60,7 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       waterLevel,
       // feedWater,
       // blowDown,
+      woodAmount,
       time,
     });
 
