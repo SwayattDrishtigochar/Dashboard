@@ -49,7 +49,6 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       woodAmount,
       time,
     } = req.body;
-    console.log(req.body);
 
     // Create a new instance of the Boiler model with the extracted form data
     const newBoilerData = await Boiler.create({
@@ -190,10 +189,46 @@ const getAllBoilerData = asyncHandler(async (req, res) => {
   }
 });
 
+const getWoodAmountForCurrentDay = asyncHandler(async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // Set time to the beginning of the next day
+
+    const woodData = await Boiler.aggregate([
+      {
+        $match: {
+          time: {
+            $gte: today,
+            $lt: tomorrow,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalWood: { $sum: '$woodAmount' },
+        },
+      },
+    ]);
+
+    const totalWoodAmount = woodData.length > 0 ? woodData[0].totalWood : 0;
+
+    res.status(200).json({
+      totalWoodAmount,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error('Error Getting Wood Data');
+  }
+});
+
 export {
   getBoilerData,
   saveBoilerData,
   deleteBoilerData,
   editBoilerData,
   getAllBoilerData,
+  getWoodAmountForCurrentDay,
 };
