@@ -66,8 +66,8 @@ const forgetPassword = asyncHandler(async (req, res) => {
       token: crypto.randomBytes(32).toString('hex'),
     }).save();
   }
-  const link = `http://192.168.100.88:3000/password-reset/${user._id}/${token.token}`;
-  await sendEmail(user.email, 'Password reset', link);
+  const link = `https://impcops.netlify.app/password-reset/${user._id}/${token.token}`;
+  sendEmail(user.email, 'Password reset', link);
   res.status(200).json('password reset link sent to your email account');
 });
 
