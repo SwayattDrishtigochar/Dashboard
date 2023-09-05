@@ -11,6 +11,7 @@ import userRoutes from './routes/userRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
 import companyRoutes from './routes/companyRoutes.js';
 import BoilerRoutes from './routes/BoilerRoute.js';
+import SensorRoutes from './routes/sensorRoutes.js';
 import connectDB from './config/db.js';
 // Set the port for the server
 const port = process.env.PORT || 8000;
@@ -37,6 +38,7 @@ app.use('/api', userRoutes);
 
 app.use('/api', companyRoutes);
 app.use('/api', BoilerRoutes);
+app.use('/api', SensorRoutes);
 
 // if (process.env.NODE_ENV === 'production') {
 //   const __dirname = path.resolve();

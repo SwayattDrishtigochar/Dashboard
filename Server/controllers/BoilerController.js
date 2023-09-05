@@ -26,9 +26,7 @@ const getBoilerData = asyncHandler(async (req, res) => {
       };
     });
 
-    res.status(200).json({
-      data: boilerDataIST,
-    });
+    res.status(200).json(boilerDataIST);
   } catch (error) {
     res.status(500);
     throw new Error('Error Getting Data');
@@ -63,10 +61,20 @@ const saveBoilerData = asyncHandler(async (req, res) => {
       time,
     });
 
-    res.status(200).json({
-      message: 'Successfully added data',
+    // Send a response with the newly created boiler data with time converted to IST
+
+    const dateIST = new Date(newBoilerData.time).toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
     });
+
+    const newBoilerDataIST = {
+      ...newBoilerData._doc,
+      time: dateIST,
+    };
+
+    res.status(200).json(newBoilerDataIST);
   } catch (error) {
+    console.log(error);
     res.status(400);
     throw new Error('Invalid Data Input');
   }
