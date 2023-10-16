@@ -12,6 +12,7 @@ import otpRoutes from './routes/otpRoutes.js';
 import companyRoutes from './routes/companyRoutes.js';
 import BoilerRoutes from './routes/BoilerRoute.js';
 import SensorRoutes from './routes/sensorRoutes.js';
+import EquipmentRoutes from './routes/equipmentRoutes.js';
 import connectDB from './config/db.js';
 // Set the port for the server
 const port = process.env.PORT || 8000;
@@ -20,13 +21,27 @@ connectDB();
 
 // Create an instance of Express application
 const app = express();
+
 app.use(
   cors({
     origin: process.env.BASE_URL,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   })
 );
+
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+//   res.setHeader(
+//     'Access-Control-Allow-Methods',
+//     'GET, POST, PUT, PATCH, DELETE'
+//   );
+//   res.setHeader(
+//     'Access-Control-Allow-Headers',
+//     'X-Requested-With, Content-Type, Authorization'
+//   );
+//   next();
+// });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -39,6 +54,7 @@ app.use('/api', userRoutes);
 app.use('/api', companyRoutes);
 app.use('/api', BoilerRoutes);
 app.use('/api', SensorRoutes);
+app.use('/api', EquipmentRoutes);
 
 // if (process.env.NODE_ENV === 'production') {
 //   const __dirname = path.resolve();

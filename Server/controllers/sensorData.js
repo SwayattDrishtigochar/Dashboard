@@ -2,7 +2,7 @@ import axios from 'axios';
 import asyncHandler from 'express-async-handler';
 
 const getSensorData = asyncHandler(async (req, res) => {
-  const { collection } = req.query;
+  const { collection, limit } = req.query;
   try {
     const apiUrl = process.env.Mongo_API;
     const headers = {
@@ -20,7 +20,7 @@ const getSensorData = asyncHandler(async (req, res) => {
           $sort: { timestamp: -1 },
         },
         {
-          $limit: 1,
+          $limit: parseInt(limit) || 1,
         },
       ],
     };
@@ -29,8 +29,8 @@ const getSensorData = asyncHandler(async (req, res) => {
     const data = response.data;
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fetching data:', error);
     res.status(500).json({ message: 'An error occurred' });
+    throw new Error(error);
   }
 });
 
@@ -68,8 +68,8 @@ const getStatus = asyncHandler(async (req, res) => {
     const data = response.data.documents[0].state;
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fetching data:', error);
     res.status(500).json({ message: 'An error occurred' });
+    throw new Error(error);
   }
 });
 

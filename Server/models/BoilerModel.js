@@ -1,45 +1,44 @@
 import mongoose from 'mongoose';
 
 // Define the schema for the boiler data
-const boilerSchema = new mongoose.Schema({
-  steamPressure: {
-    type: String,
-    required: true,
-  },
-  mainValveControls: {
-    type: String,
-    required: true,
-  },
-  feedPump1: {
-    type: String,
-    required: true,
-  },
-  feedPump2: {
-    type: String,
-    required: true,
-  },
-  waterLevel: {
-    type: String,
-    required: true,
-  },
-  // feedWater: {
-  //   type: String,
-  //   required: true,
-  // },
-  // blowDown: {
-  //   type: String,
-  //   required: true,
-  // },
+const boilerSchema = new mongoose.Schema(
+  {
+    steamPressure: {
+      type: Number,
+    },
+    mainValveControls: {
+      type: String,
+    },
+    feedPump1: {
+      type: String,
+    },
+    feedPump2: {
+      type: String,
+    },
+    waterLevel: {
+      type: String,
+    },
+    feedWater: {
+      type: String,
+    },
+    blowDown: {
+      type: String,
+    },
+    woodAmount: {
+      type: Number,
+    },
 
-  woodAmount: {
-    type: Number,
+    time: {
+      type: Date,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: Date,
   },
-
-  time: {
-    type: Date,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 // Create the Boiler model
 const Boiler = mongoose.model('Boiler', boilerSchema);

@@ -3,42 +3,21 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import Otp from '../models/OtpModel.js';
 import generateToken from '../utils/generateToken.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'sunnyvedwal@gmail.com',
-    pass: 'uepoyghnamyzcsbw',
-  },
-});
-
-const sendOtp = asyncHandler(async (email) => {
+const sendOtp = asyncHandler(async (res, email) => {
   const otp = `${Math.floor(100000 + Math.random() * 9000)}`;
-  const mailOptions = {
-    from: 'sunnyvedwal@gmail.com',
-    to: email,
-    subject: 'OTP Verification',
-    text: `Your OTP is ${otp}`,
-  };
+
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Message sent: %s', info.messageId);
+    sendEmail(res, email, 'OTP for email verification', `Your OTP is ${otp}`);
     Otp.create({
       email,
       otp,
       expireAt: addMinutesToDate(new Date(), 1),
       status: 'pending',
     });
-    //save Otp in mongo
-    // const otpData = new Otp({
-    //   email,
-    //   otp,
-    //   expireAt: addMinutesToDate(new Date(), 1),
-    //   status: 'pending',
-    // });
-    // await otpData.save();
   } catch (error) {
-    throw new Error(error);
+    res.status(500);
   }
 });
 

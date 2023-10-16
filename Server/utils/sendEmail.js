@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import asyncHandler from 'express-async-handler';
 
-export const sendEmail = asyncHandler(async (email, subject, text) => {
+export const sendEmail = asyncHandler(async (res, email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -21,6 +21,7 @@ export const sendEmail = asyncHandler(async (email, subject, text) => {
 
     console.log('email sent sucessfully');
   } catch (error) {
-    console.log(error, 'email not sent');
+    res.status(500);
+    throw new Error(error);
   }
 });

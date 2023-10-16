@@ -29,9 +29,8 @@ const getCompany = asyncHandler(async (req, res) => {
   const { companyId } = req.params;
 
   // Find the company by ID and populate the users and admins fields
-  const company = await Company.findById(companyId)
-    .populate('users', 'fname lname email companyStatus role')
-    .populate('admins');
+  const company = await Company.findById(companyId).populate('users');
+  // .populate('admins');
 
   if (company) {
     res.status(200).json(company);
@@ -43,11 +42,12 @@ const getCompany = asyncHandler(async (req, res) => {
 
 const getRequests = asyncHandler(async (req, res) => {
   const { companyId } = req.params;
+
   const pendingUsers = await User.find({
-    companyStatus: 'pending',
     company: companyId,
+    companyStatus: 'pending',
   })
-    .populate('company', 'name')
+    .populate('company')
     .select('-password');
   if (pendingUsers) {
     res.status(200).json(pendingUsers);
@@ -93,8 +93,22 @@ const getApprovedUsers = asyncHandler(async (req, res) => {
   })
     .populate('company', 'name')
     .select('-password');
-  if (approvedUsers) {
-    res.status(200).json(approvedUsers);
+  const userIST = approvedUsers.map((user) => {
+    const dateIST = new Date(user.createdAt).toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+    });
+    const lastLoginIST = new Date(user.lastLogin).toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+    });
+
+    return {
+      ...user._doc,
+      createdAt: dateIST,
+      lastLogin: lastLoginIST,
+    };
+  });
+  if (userIST) {
+    res.status(200).json(userIST);
   } else {
     res.status(404);
     throw new Error('No approved users found');

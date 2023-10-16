@@ -6,6 +6,7 @@ import {
   getBoilerData,
   getAllBoilerData,
   getWoodAmountForCurrentDay,
+  getSteamPressureForCurrentDay,
 } from '../controllers/BoilerController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -15,6 +16,8 @@ router.get('/boiler', protect, getBoilerData);
 router.get('/boiler/data', protect, getAllBoilerData);
 //get wood amount for current day
 router.get('/boiler/wood', protect, getWoodAmountForCurrentDay);
+//get steam pressure for current day
+router.get('/boiler/steam', protect, getSteamPressureForCurrentDay);
 // Save boiler data
 router.post('/boiler', protect, saveBoilerData);
 

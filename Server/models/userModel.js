@@ -42,6 +42,9 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    lastLogin: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
@@ -53,7 +56,7 @@ userSchema.pre('save', async function (next) {
     next();
   }
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  this.password = bcrypt.hash(this.password, salt);
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

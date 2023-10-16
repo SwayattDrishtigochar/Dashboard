@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/company/:companyId', protect, isAdmin, getCompany);
 
-router.get('/company/:companyId/requests', isAdmin, getRequests);
+router.get('/company/:companyId/requests', protect, isAdmin, getRequests);
 
 router.put(
   '/company/:companyId/requests/:userId',

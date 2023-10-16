@@ -36,30 +36,8 @@ const getBoilerData = asyncHandler(async (req, res) => {
 // Controller function for saving boiler data
 const saveBoilerData = asyncHandler(async (req, res) => {
   try {
-    const {
-      steamPressure,
-      mainValveControls,
-      feedPump1,
-      feedPump2,
-      waterLevel,
-      // feedWater,
-      // blowDown,
-      woodAmount,
-      time,
-    } = req.body;
-
     // Create a new instance of the Boiler model with the extracted form data
-    const newBoilerData = await Boiler.create({
-      steamPressure,
-      mainValveControls,
-      feedPump1,
-      feedPump2,
-      waterLevel,
-      // feedWater,
-      // blowDown,
-      woodAmount,
-      time,
-    });
+    const newBoilerData = await Boiler.create(req.body);
 
     // Send a response with the newly created boiler data with time converted to IST
 
@@ -232,6 +210,43 @@ const getWoodAmountForCurrentDay = asyncHandler(async (req, res) => {
   }
 });
 
+const getSteamPressureForCurrentDay = asyncHandler(async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // Set time to the beginning of the next day
+
+    const steamPressureData = await Boiler.find({
+      time: {
+        $gte: today,
+        $lt: tomorrow,
+      },
+    })
+      .sort({ time: 1 })
+      .select('steamPressure')
+      .select('time');
+
+    //send steam pressure data with createdAt converted to IST and only time
+
+    const steamPressureDataIST = steamPressureData.map((data) => {
+      const dateIST = new Date(data.time).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+      });
+
+      return {
+        steamPressure: data.steamPressure,
+        time: dateIST.split(',')[1],
+      };
+    });
+
+    res.status(200).json(steamPressureDataIST);
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
 export {
   getBoilerData,
   saveBoilerData,
@@ -239,4 +254,5 @@ export {
   editBoilerData,
   getAllBoilerData,
   getWoodAmountForCurrentDay,
+  getSteamPressureForCurrentDay,
 };
