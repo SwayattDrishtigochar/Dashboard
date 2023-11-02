@@ -16,7 +16,7 @@ const boilerSchema = new mongoose.Schema(
       type: String,
     },
     waterLevel: {
-      type: String,
+      type: Number,
     },
     feedWater: {
       type: String,

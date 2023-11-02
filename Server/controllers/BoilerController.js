@@ -247,6 +247,43 @@ const getSteamPressureForCurrentDay = asyncHandler(async (req, res) => {
   }
 });
 
+const getWaterLevelForCurrentDay = asyncHandler(async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to the beginning of the day
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // Set time to the beginning of the next day
+
+    const waterLevelData = await Boiler.find({
+      time: {
+        $gte: today,
+        $lt: tomorrow,
+      },
+    })
+      .sort({ time: 1 })
+      .select('waterLevel')
+      .select('time');
+
+    //send water level data with createdAt converted to IST and only time
+
+    const waterLevelDataIST = waterLevelData.map((data) => {
+      const dateIST = new Date(data.time).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+      });
+
+      return {
+        waterLevel: data.waterLevel,
+        time: dateIST.split(',')[1],
+      };
+    });
+
+    res.status(200).json(waterLevelDataIST);
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
+  }
+});
+
 export {
   getBoilerData,
   saveBoilerData,
@@ -255,4 +292,5 @@ export {
   getAllBoilerData,
   getWoodAmountForCurrentDay,
   getSteamPressureForCurrentDay,
+  getWaterLevelForCurrentDay,
 };
