@@ -24,6 +24,16 @@ const equipmentSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    runningHours: [
+      {
+        date: {
+          type: Date,
+        },
+        hours: {
+          type: Number,
+        },
+      },
+    ],
     createdAt: {
       type: Date,
       default: Date.now,

@@ -227,16 +227,17 @@ const getSteamPressureForCurrentDay = asyncHandler(async (req, res) => {
       .select('steamPressure')
       .select('time');
 
-    //send steam pressure data with createdAt converted to IST and only time
-
+    // Send steam pressure data with createdAt converted to IST and only time
     const steamPressureDataIST = steamPressureData.map((data) => {
-      const dateIST = new Date(data.time).toLocaleString('en-IN', {
+      const dateIST = new Date(data.time).toLocaleTimeString('en-IN', {
         timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
       });
 
       return {
         steamPressure: data.steamPressure,
-        time: dateIST.split(',')[1],
+        time: dateIST,
       };
     });
 
@@ -264,16 +265,17 @@ const getWaterLevelForCurrentDay = asyncHandler(async (req, res) => {
       .select('waterLevel')
       .select('time');
 
-    //send water level data with createdAt converted to IST and only time
-
+    // Send water level data with createdAt converted to IST and only time
     const waterLevelDataIST = waterLevelData.map((data) => {
-      const dateIST = new Date(data.time).toLocaleString('en-IN', {
+      const dateIST = new Date(data.time).toLocaleTimeString('en-IN', {
         timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
       });
 
       return {
         waterLevel: data.waterLevel,
-        time: dateIST.split(',')[1],
+        time: dateIST,
       };
     });
 
