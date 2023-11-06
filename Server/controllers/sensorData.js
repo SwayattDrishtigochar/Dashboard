@@ -32,8 +32,6 @@ const getSensorData = asyncHandler(async (req, res) => {
     if (data.documents.length > 0) {
       data.documents = data.documents.map((data) => {
         const dateIST = new Date(data.timestamp).toLocaleString('en-IN', {
-          timeZoneName: 'short',
-
           hour: '2-digit',
           minute: '2-digit',
         });
