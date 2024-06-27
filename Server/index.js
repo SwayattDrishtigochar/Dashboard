@@ -24,7 +24,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.BASE_URL,
+    origin: [process.env.BASE_URL, process.env.BASE_URL_2],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   })
